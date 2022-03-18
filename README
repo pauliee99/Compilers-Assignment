@@ -7,7 +7,9 @@ Compilation Instructions
 
 2. Compile using maven
 
-`mvn package`
+``` 
+mvn package
+```
 
 3. Execute
 
