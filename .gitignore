@@ -5,6 +5,4 @@ nbactions.xml
 .settings
 .project
 src/main/java/Lexer.java
-src/main/java/parser.java
-src/main/java/sym.java
 *~

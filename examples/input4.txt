@@ -1,5 +1,22 @@
-/* Example 4 */
-x = 4.0e-2; 
-y = 100 * x * x + 7 * x + .3; 
-z = y / 0.0;
-print(-y/2.0);
+/*
+* Sample program 4
+*/
+void main() {
+    int myarray[100];
+    int i;
+    i = 0;
+    while(i<100) {
+        myarray[i] = i;
+        i=i+1;
+    }
+    int total;
+    total = 0;
+    i = 0;
+    while(i<100) {
+        total = total + myarray[i];
+        i=i+1;
+    }
+    print(total);
+    print('\n');
+    return;
+}
