@@ -28,6 +28,8 @@ Comment        = "/*" [^*] ~"*/" | "/*" "*"+ "/"
 
 Identifier     = [:jletter:] [:jletterdigit:]*
 IntegerLiteral = 0 | [1-9][0-9]*
+CharacterLiteral = [a-zA-Z_][a-zA-Z0-9_]*
+BooleanLiteral   = (\btrue\b)|(\bfalse\b)
 
 Exponent = [eE] [\+\-]?[0-9]+
 Float1 = [0-9]+ \. [0-9]+ {Exponent}?
@@ -58,8 +60,8 @@ FloatLiteral = {Float1} | {Float2} | {Float3} | {Float4}}
     /* literals */
     {IntegerLiteral}               { out.println("integer:" + yytext()); }
     {FloatLiteral}               { out.println("float:" + yytext()); }
-    {CharLiteral}               { out.println("float:" + yytext()); }
-    {BoolLiteral}               { out.println("float:" + yytext()); }
+    {CharacterLiteral}               { out.println("float:" + yytext()); }
+    {BooleanLiteral}               { out.println("float:" + yytext()); }
 
     \"                             { sb.setLength(0); yybegin(STRING); }
 
@@ -74,17 +76,17 @@ FloatLiteral = {Float1} | {Float2} | {Float3} | {Float4}}
     "("                            { out.println("RIGHT_PARENTHESIS"); }
     ")"                            { out.println("LEFT_PARENTHESIS"); }
      "<"                            { out.println("LESS_THAN"); }
-    ">"                            { out.println("GREATER_THAN") }
-    "<="                           { out.println("LESS_EQUAL") }
-    ">="                           { out.println("GREATER_THAN") }
-    "=="                           { out.println("EQUAL_EQUAL") }
-    "!="                           { out.println("NOT_EQUAL") }
-    "{"                            { out.println("LEFT_CURLY") }
-    "}"                            { out.println("RIGHT_CURLY") }
-    "&&"                            { out.println("AND") }
-    "||"                            { out.println("OR") }
-    "!"                            { out.println("NOT") }
-    "."                            { out.println("DOT") }
+    ">"                            { out.println("GREATER_THAN"); }
+    "<="                           { out.println("LESS_EQUAL"); }
+    ">="                           { out.println("GREATER_THAN"); }
+    "=="                           { out.println("EQUAL_EQUAL"); }
+    "!="                           { out.println("NOT_EQUAL"); }
+    "{"                            { out.println("LEFT_CURLY"); }
+    "}"                            { out.println("RIGHT_CURLY"); }
+    "&&"                            { out.println("AND"); }
+    "||"                            { out.println("OR"); }
+    "!"                            { out.println("NOT"); }
+    "."                            { out.println("DOT"); }
 
     /* comments */
     {Comment}                      { /* ignore */ }
