@@ -22,13 +22,15 @@ import static java.lang.System.out;
 
 %}
 
+r = "print" | "while" | "if" | "else" | "void" | "return" | "break" | "continue" | "struct" // exclude keywords
+
 LineTerminator = \r|\n|\r\n
 WhiteSpace     = {LineTerminator} | [ \t\f] 
 Comment        = "/*" [^*] ~"*/" | "/*" "*"+ "/"
 
 Identifier     = [:jletter:] [:jletterdigit:]*
 IntegerLiteral = 0 | [1-9][0-9]*
-CharacterLiteral = [a-zA-Z_][a-zA-Z0-9_]*
+CharacterLiteral = [a-zA-Z_][a-zA-Z0-9_]* !r
 BooleanLiteral   = (\btrue\b)|(\bfalse\b)
 
 Exponent = [eE] [\+\-]?[0-9]+
@@ -83,10 +85,13 @@ FloatLiteral = {Float1} | {Float2} | {Float3} | {Float4}}
     "!="                           { out.println("NOT_EQUAL"); }
     "{"                            { out.println("LEFT_CURLY"); }
     "}"                            { out.println("RIGHT_CURLY"); }
+    "["                            { out.println("RIGHT_SQUARE"); }
+    "]"                            { out.println("LEFT_SQUARE"); }
     "&&"                            { out.println("AND"); }
     "||"                            { out.println("OR"); }
     "!"                            { out.println("NOT"); }
     "."                            { out.println("DOT"); }
+    ","                            { out.println("COMMA"); }
 
     /* comments */
     {Comment}                      { /* ignore */ }
