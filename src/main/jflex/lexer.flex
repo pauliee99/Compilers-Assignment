@@ -43,6 +43,14 @@ FloatLiteral = {Float1} | {Float2} | {Float3} | {Float4}}
 <YYINITIAL> {
     /* reserved keywords */
     "print"                        { out.println("PRINT"); }
+    "while"                        { out.println("WHILE"); }
+    "if"                        { out.println("IF"); }
+    "else"                        { out.println("ELSE"); }
+    "void"                        { out.println("VOID"); }
+    "return"                        { out.println("RETURN"); }
+    "break"                        { out.println("BREAK"); }
+    "continue"                        { out.println("CONTINUE"); }
+    "struct"                        { out.println("STRUCT"); }
 
     /* identifiers */ 
     {Identifier}                   { out.println("id:" + yytext()); }
