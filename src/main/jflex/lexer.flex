@@ -55,10 +55,19 @@ FloatLiteral     = {Float1} | {Float2} | {Float3} | {Float4}
 
 <YYINITIAL> {
     /* reserved keywords */
-    "print"                        { return createSymbol(sym.PRINT); }
-    "do"                        { return createSymbol(sym.DO); }
+    "do"                           { return createSymbol(sym.DO); }
     "while"                        { return createSymbol(sym.WHILE); }
-    "if"                        { return createSymbol(sym.IF); }
+    "if"                           { return createSymbol(sym.IF); }
+    "bool"                         { return createSymbol(sym.BOOL); }
+    "float"                        { return createSymbol(sym.FLOAT); }
+    "int"                          { return createSymbol(sym.INT); }
+    "char"                         { return createSymbol(sym.CHAR); }
+    "else"                         { return createSymbol(sym.ELSE); }
+    "void"                         { return createSymbol(sym.VOID); }
+    "return"                       { return createSymbol(sym.RETURN); }
+    "break"                        { return createSymbol(sym.BREAK); }
+    "continue"                     { return createSymbol(sym.CONTINUE); }
+    "struct"                       { return createSymbol(sym.STRUCT); }
 
     /* identifiers */ 
     {Identifier}                   { return createSymbol(sym.IDENTIFIER, yytext()); }
