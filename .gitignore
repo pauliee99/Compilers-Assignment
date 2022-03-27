@@ -6,3 +6,4 @@ nbactions.xml
 .project
 src/main/java/Lexer.java
 *~
+*.backup
