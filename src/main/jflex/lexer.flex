@@ -47,21 +47,6 @@ FloatLiteral = {Float1} | {Float2} | {Float3} | {Float4}}
 
 <YYINITIAL> {
     /* reserved keywords */
-<<<<<<< HEAD
-    "do"                           { return createSymbol(sym.DO); }
-    "while"                        { return createSymbol(sym.WHILE); }
-    "if"                           { return createSymbol(sym.IF); }
-    "bool"                         { return createSymbol(sym.BOOL); }
-    "float"                        { return createSymbol(sym.FLOAT); }
-    "int"                          { return createSymbol(sym.INT); }
-    "char"                         { return createSymbol(sym.CHAR); }
-    "else"                         { return createSymbol(sym.ELSE); }
-    "void"                         { return createSymbol(sym.VOID); }
-    "return"                       { return createSymbol(sym.RETURN); }
-    "break"                        { return createSymbol(sym.BREAK); }
-    "continue"                     { return createSymbol(sym.CONTINUE); }
-    "struct"                       { return createSymbol(sym.STRUCT); }
-=======
     "while"                        { out.println("WHILE"); }
     "if"                           { out.println("IF"); }
     "else"                         { out.println("ELSE"); }
@@ -75,7 +60,6 @@ FloatLiteral = {Float1} | {Float2} | {Float3} | {Float4}}
     "int"                          { out.println("INT"); }
     "char"                         { out.println("CHAR"); }
 
->>>>>>> Assignment01
 
     /* identifiers */ 
     {Identifier}                   { out.println("id:" + yytext()); }
