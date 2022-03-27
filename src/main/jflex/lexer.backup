@@ -22,16 +22,16 @@ import static java.lang.System.out;
 
 %}
 
+r = "print" | "while" | "if" | "else" | "void" | "return" | "break" | "continue" | "struct" // exclude keywords
+
 LineTerminator = \r|\n|\r\n
 WhiteSpace     = {LineTerminator} | [ \t\f] 
 Comment        = "/*" [^*] ~"*/" | "/*" "*"+ "/"
 
 Identifier     = [:jletter:] [:jletterdigit:]*
 IntegerLiteral = 0 | [1-9][0-9]*
-CharacterLiteral = [a-zA-Z0-9_]
-StringLiteral = {CharacterLiteral}*
+CharacterLiteral = [a-zA-Z_][a-zA-Z0-9_]* !r
 BooleanLiteral   = (\btrue\b)|(\bfalse\b)
-
 
 Exponent = [eE] [\+\-]?[0-9]+
 Float1 = [0-9]+ \. [0-9]+ {Exponent}?
@@ -41,54 +41,31 @@ Float4 = [0-9]+ {Exponent}
 FloatLiteral = {Float1} | {Float2} | {Float3} | {Float4}}
 
 %state STRING
-%state CHARACTER
 
 %%
 
 <YYINITIAL> {
     /* reserved keywords */
-<<<<<<< HEAD
-    "do"                           { return createSymbol(sym.DO); }
-    "while"                        { return createSymbol(sym.WHILE); }
-    "if"                           { return createSymbol(sym.IF); }
-    "bool"                         { return createSymbol(sym.BOOL); }
-    "float"                        { return createSymbol(sym.FLOAT); }
-    "int"                          { return createSymbol(sym.INT); }
-    "char"                         { return createSymbol(sym.CHAR); }
-    "else"                         { return createSymbol(sym.ELSE); }
-    "void"                         { return createSymbol(sym.VOID); }
-    "return"                       { return createSymbol(sym.RETURN); }
-    "break"                        { return createSymbol(sym.BREAK); }
-    "continue"                     { return createSymbol(sym.CONTINUE); }
-    "struct"                       { return createSymbol(sym.STRUCT); }
-=======
+    "print"                        { out.println("PRINT"); }
     "while"                        { out.println("WHILE"); }
-    "if"                           { out.println("IF"); }
-    "else"                         { out.println("ELSE"); }
-    "void"                         { out.println("VOID"); }
-    "return"                       { out.println("RETURN"); }
+    "if"                        { out.println("IF"); }
+    "else"                        { out.println("ELSE"); }
+    "void"                        { out.println("VOID"); }
+    "return"                        { out.println("RETURN"); }
     "break"                        { out.println("BREAK"); }
-    "continue"                     { out.println("CONTINUE"); }
-    "struct"                       { out.println("STRUCT"); }
-    "bool"                         { out.println("BOOL"); }
-    "float"                        { out.println("FLOAT"); }
-    "int"                          { out.println("INT"); }
-    "char"                         { out.println("CHAR"); }
-
->>>>>>> Assignment01
+    "continue"                        { out.println("CONTINUE"); }
+    "struct"                        { out.println("STRUCT"); }
 
     /* identifiers */ 
     {Identifier}                   { out.println("id:" + yytext()); }
 
     /* literals */
-    {IntegerLiteral}               { out.println("Integer:" + yytext()); }
-    {FloatLiteral}                 { out.println("Float:" + yytext()); }
-    {CharacterLiteral}             { out.println("Character:" + yytext()); }
-    {StringLiteral}                { out.println("String:" + yytext()); }
-    {BooleanLiteral}               { out.println("Boolean:" + yytext()); }
+    {IntegerLiteral}               { out.println("integer:" + yytext()); }
+    {FloatLiteral}               { out.println("float:" + yytext()); }
+    {CharacterLiteral}               { out.println("float:" + yytext()); }
+    {BooleanLiteral}               { out.println("float:" + yytext()); }
 
     \"                             { sb.setLength(0); yybegin(STRING); }
-    \'                             { sb.setLength(0); yybegin(CHARACTER); }
 
     /* operators */
     "="                            { out.println("ASSIGN"); }
@@ -100,7 +77,7 @@ FloatLiteral = {Float1} | {Float2} | {Float3} | {Float4}}
     ";"                            { out.println("SEMICOLON"); }
     "("                            { out.println("RIGHT_PARENTHESIS"); }
     ")"                            { out.println("LEFT_PARENTHESIS"); }
-    "<"                            { out.println("LESS_THAN"); }
+     "<"                            { out.println("LESS_THAN"); }
     ">"                            { out.println("GREATER_THAN"); }
     "<="                           { out.println("LESS_EQUAL"); }
     ">="                           { out.println("GREATER_THAN"); }
@@ -110,8 +87,8 @@ FloatLiteral = {Float1} | {Float2} | {Float3} | {Float4}}
     "}"                            { out.println("RIGHT_CURLY"); }
     "["                            { out.println("RIGHT_SQUARE"); }
     "]"                            { out.println("LEFT_SQUARE"); }
-    "&&"                           { out.println("AND"); }
-    "||"                           { out.println("OR"); }
+    "&&"                            { out.println("AND"); }
+    "||"                            { out.println("OR"); }
     "!"                            { out.println("NOT"); }
     "."                            { out.println("DOT"); }
     ","                            { out.println("COMMA"); }
@@ -123,25 +100,15 @@ FloatLiteral = {Float1} | {Float2} | {Float3} | {Float4}}
     {WhiteSpace}                   { /* ignore */ }
 }
 
-<CHARACTER> {
-    \'                             { yybegin(YYINITIAL);
-                                     out.println("single character: " + sb.toString()); 
-                                   }
-    [^\n\t\0\'\\]+                 { sb.append(yytext()); }
-    \\t                            { sb.append('\t'); }
-    \\n                            { sb.append('\n'); }
-    \\r                            { sb.append('\r'); }
-    \\\"                           { sb.append('\"'); }
-    \\                             { sb.append('\\'); }
-}
-
 <STRING> {
     \"                             { yybegin(YYINITIAL);
-                                     out.println("string: " + sb.toString()); 
+                                     out.println("string:" + sb.toString()); 
                                    }
-    [^\n\t\"\\]+                   { sb.append(yytext()); }
+
+    [^\n\r\"\\]+                   { sb.append(yytext()); }
     \\t                            { sb.append('\t'); }
     \\n                            { sb.append('\n'); }
+
     \\r                            { sb.append('\r'); }
     \\\"                           { sb.append('\"'); }
     \\                             { sb.append('\\'); }
