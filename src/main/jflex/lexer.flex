@@ -65,11 +65,11 @@ FloatLiteral = {Float1} | {Float2} | {Float3} | {Float4}}
     {Identifier}                   { out.println("id:" + yytext()); }
 
     /* literals */
-    {IntegerLiteral}               { out.println("Integer:" + yytext()); }
-    {FloatLiteral}                 { out.println("Float:" + yytext()); }
-    {CharacterLiteral}             { out.println("Character:" + yytext()); }
-    {StringLiteral}                { out.println("String:" + yytext()); }
-    {BooleanLiteral}               { out.println("Boolean:" + yytext()); }
+    {IntegerLiteral}               { out.println("INTEGER:" + yytext()); }
+    {FloatLiteral}                 { out.println("FLOAT:" + yytext()); }
+    {CharacterLiteral}             { out.println("CHARACTER:" + yytext()); }
+    {StringLiteral}                { out.println("STRING:" + yytext()); }
+    {BooleanLiteral}               { out.println("BOOLEAN" + yytext()); }
 
     \"                             { sb.setLength(0); yybegin(STRING); }
     \'                             { sb.setLength(0); yybegin(CHARACTER); }
@@ -109,24 +109,23 @@ FloatLiteral = {Float1} | {Float2} | {Float3} | {Float4}}
 
 <CHARACTER> {
     \'                             { yybegin(YYINITIAL);
-                                     out.println("single character: " + sb.toString()); 
+                                     out.println("SINGLE CHARACTER:" + sb.toString()); 
                                    }
     [^\n\t\0\'\\]+                 { sb.append(yytext()); }
     \\t                            { sb.append('\t'); }
     \\n                            { sb.append('\n'); }
-    \\r                            { sb.append('\r'); }
-    \\\"                           { sb.append('\"'); }
+    \\0                            { sb.append('\0'); }
+    \\\'                           { sb.append('\''); }
     \\                             { sb.append('\\'); }
 }
 
 <STRING> {
     \"                             { yybegin(YYINITIAL);
-                                     out.println("string: " + sb.toString()); 
+                                     out.println("STRING:" + sb.toString()); 
                                    }
     [^\n\t\"\\]+                   { sb.append(yytext()); }
     \\t                            { sb.append('\t'); }
     \\n                            { sb.append('\n'); }
-    \\r                            { sb.append('\r'); }
     \\\"                           { sb.append('\"'); }
     \\                             { sb.append('\\'); }
 }
