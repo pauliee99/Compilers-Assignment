@@ -1,3 +1,9 @@
+
+This code is part of the lab exercises for the Compilers course
+at Harokopio University of Athens, Dept. of Informatics and Telematics.
+
+http://www.dit.hua.gr/
+------------------------
 # Compilers Assignment
 
 Compilation Instructions
@@ -11,9 +17,11 @@ Compilation Instructions
 
 3. Execute
 
-`java -jar target/compiler-0.0.1.jar input-filename`
+`java -jar target/compiler-0.0.2.jar input-filename`
 
 or 
 
-`java -cp target/compiler-0.0.1.jar Compiler input-filename`
+`java -cp target/compiler-0.0.2.jar Compiler input-filename`
+
+
 
