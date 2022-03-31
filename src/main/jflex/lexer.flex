@@ -108,8 +108,11 @@ FloatLiteral = {Float1} | {Float2} | {Float3} | {Float4}}
 }
 
 <CHARACTER> {
-    \'                             { yybegin(YYINITIAL);
-                                     out.println("SINGLE CHARACTER:" + sb.toString()); 
+    \'                             { yybegin(YYINITIAL); sb.toString(); 
+                                        if (sb.length() > 1 ){
+                                            throw new RuntimeException((yyline+1) + ":" + (yycolumn+1) + ":  Only one character is allowed in '', Did you mean to use "" instead? ");} else{
+                                                out.println("SINGLE CHARACTER:" + sb.toString());
+                                            } 
                                    }
     [^\n\t\0\'\\]+                 { sb.append(yytext()); }
     \\t                            { sb.append('\t'); }
