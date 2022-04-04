@@ -80,7 +80,6 @@ terminal java.lang.Double    DOUBLE_LITERAL;
 terminal java.lang.String    STRING_LITERAL;
 terminal java.lang.Boolean   BOOLEAN_LITERAL;
 terminal java.lang.Character CHARACTER_LITERAL;
-terminal java.lang.String STRING_LITERAL;
 
 
 non terminal Expr;

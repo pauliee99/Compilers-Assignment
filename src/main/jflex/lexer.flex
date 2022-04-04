@@ -67,11 +67,11 @@ FloatLiteral   = {Float1} | {Float2} | {Float3} | {Float4}
     "break"                        { return createSymbol(sym.BREAK); }
     "continue"                     { return createSymbol(sym.CONTINUE); }
     "struct"                       { return createSymbol(sym.STRUCT); }
-    "bool"                         { return createSymbol(sym.BOOLEAN_LITERAL);     }
+    "bool"                         { return createSymbol(sym.BOOLEAN_LITERAL); }
     "float"                        { return createSymbol(sym.DOUBLE_LITERAL); }
     "int"                          { return createSymbol(sym.INTEGER_LITERAL); }
     "char"                         { return createSymbol(sym.CHARACTER_LITERAL); } // afto pezi na min xriazete
-    "String"                         { return createSymbol(sym.STRING_LITERAL); } // afto pezi na min xriazete
+    "String"                       { return createSymbol(sym.STRING_LITERAL); } // afto pezi na min xriazete
 
     /* identifiers */ 
     {Identifier}                   { return createSymbol(sym.IDENTIFIER, yytext()); }
