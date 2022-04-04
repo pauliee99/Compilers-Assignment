@@ -66,17 +66,22 @@ terminal VOID, RETURN, BREAK , CONTINUE, STRUCT;
 //terminal BOOL, FLOAT, INT, CHAR;
 terminal LPAREN, RPAREN, SEMICOLON;
 terminal EQ;
-terminal TIMES, DIVISION;
+terminal TIMES, DIVISION, MODULUS;
 terminal PLUS, MINUS, UMINUS;
 
 terminal LT, GT, LE, GE, EQEQ, NEQ;
 terminal LCURLY, RCURLY;
+terminal RIGHT_SQUARE, LEFT_SQUARE;
+terminal LAND, LOR, LNOT; 
+terminal DOT, COMMA;
 
 terminal java.lang.Integer   INTEGER_LITERAL;
 terminal java.lang.Double    DOUBLE_LITERAL;
 terminal java.lang.String    STRING_LITERAL;
 terminal java.lang.Boolean   BOOLEAN_LITERAL;
 terminal java.lang.Character CHARACTER_LITERAL;
+terminal java.lang.String STRING_LITERAL;
+
 
 non terminal Expr;
 non terminal Stmt;

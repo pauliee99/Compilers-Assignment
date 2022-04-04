@@ -70,13 +70,17 @@ FloatLiteral   = {Float1} | {Float2} | {Float3} | {Float4}
     "bool"                         { return createSymbol(sym.BOOLEAN_LITERAL);     }
     "float"                        { return createSymbol(sym.DOUBLE_LITERAL); }
     "int"                          { return createSymbol(sym.INTEGER_LITERAL); }
-    "char"                         { return createSymbol(sym.CHARACTER_LITERAL); }
+    "char"                         { return createSymbol(sym.CHARACTER_LITERAL); } // afto pezi na min xriazete
+    "String"                         { return createSymbol(sym.STRING_LITERAL); } // afto pezi na min xriazete
 
     /* identifiers */ 
     {Identifier}                   { return createSymbol(sym.IDENTIFIER, yytext()); }
 
     {IntegerLiteral}               { return createSymbol(sym.INTEGER_LITERAL, Integer.valueOf(yytext())); }
     {FloatLiteral}                 { return createSymbol(sym.DOUBLE_LITERAL, Double.valueOf(yytext())); }
+    {CharacterLiteral}             { return createSymbol(sym.CHARACTER_LITERAL, Character.valueOf(yytext())); }
+    {StringLiteral}                { return createSymbol(sym.STRING_LITERAL, String.valueOf(yytext())); }
+    {BooleanLiteral}               { return createSymbol(sym.BOOLEAN_LITERAL, Boolean.valueOf(yytext())); }
 
     \"                             { sb.setLength(0); yybegin(STRING); }
 
@@ -86,6 +90,7 @@ FloatLiteral   = {Float1} | {Float2} | {Float3} | {Float4}
     "-"                            { return createSymbol(sym.MINUS); }
     "*"                            { return createSymbol(sym.TIMES); }
     "/"                            { return createSymbol(sym.DIVISION); }
+    "%"                            { return createSymbol(sym.MODULUS); }
     "("                            { return createSymbol(sym.LPAREN); }
     ")"                            { return createSymbol(sym.RPAREN); }
     ";"                            { return createSymbol(sym.SEMICOLON); }
@@ -97,12 +102,34 @@ FloatLiteral   = {Float1} | {Float2} | {Float3} | {Float4}
     "!="                           { return createSymbol(sym.NEQ); }
     "{"                            { return createSymbol(sym.LCURLY); }
     "}"                            { return createSymbol(sym.RCURLY); }
+    "["                            { return createSymbol(sym.LEFT_SQUARE); }
+    "]"                            { return createSymbol(sym.RIGHT_SQUARE); }
+    "&&"                           { return createSymbol(sym.LAND); }
+    "||"                           { return createSymbol(sym.LOR); }
+    "!"                            { return createSymbol(sym.LNOT); }
+    "."                            { return createSymbol(sym.DOT); }
+    ","                            { return createSymbol(sym.COMMA); }
 
     /* comments */
     {Comment}                      { /* ignore */ }
 
     /* whitespace */
     {WhiteSpace}                   { /* ignore */ }
+}
+
+<CHARACTER> {
+    \'                             { yybegin(YYINITIAL); sb.toString(); 
+                                        if (sb.length() > 1 ){
+                                            throw new RuntimeException((yyline+1) + ":" + (yycolumn+1) + ":  Only one character is allowed in '', Did you mean to use "" instead? ");} else{
+                                                out.println("SINGLE CHARACTER:" + sb.toString());
+                                            } 
+                                   }
+    [^\n\t\0\'\\]+                 { sb.append(yytext()); }
+    \\t                            { sb.append('\t'); }
+    \\n                            { sb.append('\n'); }
+    \\0                            { sb.append('\0'); }
+    \\\'                           { sb.append('\''); }
+    \\                             { sb.append('\\'); }
 }
 
 <STRING> {
