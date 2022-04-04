@@ -83,6 +83,7 @@ FloatLiteral   = {Float1} | {Float2} | {Float3} | {Float4}
     {BooleanLiteral}               { return createSymbol(sym.BOOLEAN_LITERAL, Boolean.valueOf(yytext())); }
 
     \"                             { sb.setLength(0); yybegin(STRING); }
+    \'                             { sb.setLength(0); yybegin(CHARACTER); }
 
     /* operators */
     "="                            { return createSymbol(sym.EQ); }
