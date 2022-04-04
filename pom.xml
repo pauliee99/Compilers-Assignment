@@ -4,10 +4,10 @@
 
     <groupId>org.hua</groupId>
     <artifactId>compiler</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <packaging>jar</packaging>
 
-    <name>compiler-lab1</name>
+    <name>compiler-lab2</name>
     <url>http://www.dit.hua.gr</url>
 
     <properties>
@@ -19,6 +19,7 @@
         <org.apache.commons-lang.version>3.4</org.apache.commons-lang.version>
         <args4j.version>2.0.16</args4j.version>
         <jflex.version>1.8.2</jflex.version>
+        <java-cup.version>0.11a</java-cup.version>
         <org.slf4j.version>1.6.4</org.slf4j.version>
         <logback.version>1.0.1</logback.version>
         <junit.version>4.8.2</junit.version>
@@ -64,6 +65,13 @@
             <artifactId>jflex-maven-plugin</artifactId>
             <version>${jflex.version}</version>
         </dependency>
+        <dependency>
+            <groupId>net.sf.squirrel-sql.thirdparty-non-maven</groupId>
+            <artifactId>java-cup</artifactId>
+            <version>${java-cup.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -96,7 +104,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.2</version>
+                <version>3.2.0</version>
                 <executions>
                     <!-- Run shade goal on package phase -->
                     <execution>
@@ -105,7 +113,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        	<createDependencyReducedPom>false</createDependencyReducedPom>
                             <transformers>
                                 <!-- add Main-Class to manifest file -->
                                 <transformer
@@ -141,6 +149,33 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>java_cup.Main</mainClass>
+                    <arguments>
+                        <argument>-destdir</argument>
+                        <argument>${basedir}/src/main/java</argument>
+                        <argument>${basedir}/src/main/cup/grammar.cup</argument>
+                    </arguments>
+                    <systemProperties>
+                        <systemProperty>
+                            <key>exec.workingdir</key>
+                            <value>/tmp</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>com.mycila.maven-license-plugin</groupId>
                 <artifactId>maven-license-plugin</artifactId>
                 <version>1.9.0</version>
@@ -157,7 +192,7 @@
                         <exclude>**/jflex/*</exclude>
                     </excludes>
                     <properties>
-                        <years>2012-2020</years>
+                        <years>2012-2016</years>
                     </properties>
                 </configuration>
             </plugin>
@@ -166,11 +201,11 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                        </manifest>
-                    </archive>
+                	<archive>
+                		<manifest>
+                			<addClasspath>true</addClasspath>
+                		</manifest>
+                	</archive>
                 </configuration>
             </plugin>
         </plugins>
