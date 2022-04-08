@@ -156,3 +156,25 @@ Expr ::= INTEGER_LITERAL
 
 ExprList ::= Expr
            | ExprList COMMA Expr
+
+/*
+VariableDefinition ::= TypeSpecifier IDENTIFIER SEMICOLON
+                     | TypeSpecifier IDENTIFIER LEFT_SQUARE INTEGER_LITERAL RIGHT_SQUARE SEMICOLON
+
+StructDefinition ::= STRUCT IDENTIFIER LCURLY VariableDefinition RCURLY SEMICOLON
+
+TypeSpecifier ::= CHAR // what
+                | BOOL // is 
+                | INT // happening 
+                | FLOAT // here
+                | VOID
+                | STRUCT IDENTIFIER
+
+ParameterDeclaration ::= TypeSpecifier IDENTIFIER
+                       | TypeSpecifier LEFT_SQUARE RIGHT_SQUARE IDENTIFIER
+
+ParameterList ::= ParameterDeclaration
+                | ParameterList COMMA ParameterDeclaration
+
+FunctionDefinition ::= TypeSpecifier IDENTIFIER LPAREN ParameterList? RPAREN LCURLY Stmt* RCURLY
+*/ // wtf are those...
