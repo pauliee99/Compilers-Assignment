@@ -4,6 +4,7 @@ nbactions.xml
 .classpath
 .settings
 .project
-src/main/java/Lexer.java
+src/main/java/*
 *~
 *.backup
+.mvn/wrapper/maven-wrapper.jar
