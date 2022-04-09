@@ -94,19 +94,32 @@ non terminal TypeSpecifier;
 non terminal ParameterDeclaration;
 non terminal ParameterList;
 non terminal FunctionDefinition;
+non terminal Definitions;
 
 /* oso pio kato toso megaliteri protereotita */
+precedence left LOR;
+precedence left LAND;
 precedence left EQEQ, NEQ;
 precedence left LT, GT, LE, GE;
 precedence left PLUS, MINUS;
-precedence left TIMES, DIVISION;
-precedence right UMINUS;
+precedence left TIMES, DIVISION, MODULUS;
+precedence right UMINUS, LNOT;
+precedence left LPAREN, RPAREN, LEFT_SQUARE, RIGHT_SQUARE, DOT; //den ksero an afta rpei na ine edo
 
 start with CompUnit;
 
 /* whitespace OR statement list */
+//CompUnit               ::= 
+//                         | StmtList
+//                         ;
 CompUnit               ::= 
-                         | StmtList
+                         | Definitions
+                         | CompUnit Definitions
+                         ;
+
+Definitions            ::= VariableDefinition
+                         | FunctionDefinition
+                         | StructDefinition
                          ;
 
 StmtList               ::= Stmt
@@ -121,10 +134,10 @@ Stmt                   ::= PRINT LPAREN Expr RPAREN SEMICOLON
                          | IF LPAREN Expr RPAREN Stmt
                          | IF LPAREN Expr RPAREN Stmt ELSE Stmt
                          | Expr SEMICOLON
-                         | RETURN Expr SEMICOLON // erotimatiko?
+                         | RETURN Expr SEMICOLON
                          | BREAK SEMICOLON
                          | CONTINUE SEMICOLON
-                         | LCURLY Stmt RCURLY // asteraki?
+                         | LCURLY StmtList RCURLY
                          ;
 
 CompoundStmt           ::= LCURLY RCURLY
@@ -137,7 +150,7 @@ Expr                   ::= INTEGER_LITERAL
                          | BOOLEAN_LITERAL
                          | CHARACTER_LITERAL
                          | IDENTIFIER
-                         | IDENTIFIER LPAREN ExprList RPAREN // erotimatiko?
+                         | IDENTIFIER LPAREN ExprList RPAREN
                          | IDENTIFIER LEFT_SQUARE Expr RIGHT_SQUARE
                          | Expr DOT IDENTIFIER
                          | Expr DOT IDENTIFIER LEFT_SQUARE Expr RIGHT_SQUARE
@@ -156,7 +169,6 @@ Expr                   ::= INTEGER_LITERAL
                          | LNOT Expr
                          | Expr LOR Expr
                          | Expr LAND Expr
-                         | MINUS Expr
                          | MINUS Expr %prec UMINUS // allazo tin protereotita se protereotita tou uminus
                          ;
 
@@ -165,27 +177,27 @@ ExprList               ::= Expr
                          ;
 
 VariableDefinition     ::= TypeSpecifier IDENTIFIER SEMICOLON
-                       | TypeSpecifier IDENTIFIER LEFT_SQUARE INTEGER_LITERAL RIGHT_SQUARE SEMICOLON
-                       ;
+                         | TypeSpecifier IDENTIFIER LEFT_SQUARE INTEGER_LITERAL RIGHT_SQUARE SEMICOLON
+                         ;
 
-StructDefinition      ::= STRUCT IDENTIFIER LCURLY VariableDefinition RCURLY SEMICOLON
-                       ;
+StructDefinition       ::= STRUCT IDENTIFIER LCURLY VariableDefinition RCURLY SEMICOLON
+                         ;
 
-TypeSpecifier         ::= CHAR // what
-                        | BOOL // is 
-                        | INT // happening 
-                        | FLOAT // here
-                        | VOID
-                        | STRUCT IDENTIFIER
-                        ;
+TypeSpecifier          ::= CHAR // what
+                         | BOOL // is 
+                         | INT // happening 
+                         | FLOAT // here
+                         | VOID
+                         | STRUCT IDENTIFIER
+                         ;
 
-ParameterDeclaration  ::= TypeSpecifier IDENTIFIER
-                        | TypeSpecifier LEFT_SQUARE RIGHT_SQUARE IDENTIFIER
-                        ;
+ParameterDeclaration   ::= TypeSpecifier IDENTIFIER
+                         | TypeSpecifier LEFT_SQUARE RIGHT_SQUARE IDENTIFIER
+                         ;
 
-ParameterList         ::= ParameterDeclaration
-                        | ParameterList COMMA ParameterDeclaration
-                        ;
+ParameterList          ::= ParameterDeclaration
+                         | ParameterList COMMA ParameterDeclaration
+                         ;
 
-FunctionDefinition    ::= TypeSpecifier IDENTIFIER LPAREN ParameterList RPAREN LCURLY Stmt RCURLY // asteraki kai erotimatiko??
-                        ;
+FunctionDefinition     ::= TypeSpecifier IDENTIFIER LPAREN ParameterList RPAREN LCURLY StmtList RCURLY
+                         ;
