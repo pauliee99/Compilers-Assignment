@@ -67,11 +67,10 @@ FloatLiteral   = {Float1} | {Float2} | {Float3} | {Float4}
     "break"                        { return createSymbol(sym.BREAK); }
     "continue"                     { return createSymbol(sym.CONTINUE); }
     "struct"                       { return createSymbol(sym.STRUCT); }
-    "bool"                         { return createSymbol(sym.BOOLEAN_LITERAL); }
-    "float"                        { return createSymbol(sym.DOUBLE_LITERAL); }
-    "int"                          { return createSymbol(sym.INTEGER_LITERAL); }
-    "char"                         { return createSymbol(sym.CHARACTER_LITERAL); } // afto pezi na min xriazete
-    "String"                       { return createSymbol(sym.STRING_LITERAL); } // afto pezi na min xriazete
+    "bool"                         { return createSymbol(sym.BOOLEAN_SPECIFIER); }
+    "float"                        { return createSymbol(sym.DOUBLE_SPECIFIER); }
+    "int"                          { return createSymbol(sym.INTEGER_SPECIFIER); }
+    "char"                         { return createSymbol(sym.CHARACTER_SPECIFIER); }
 
     /* identifiers */ 
     {Identifier}                   { return createSymbol(sym.IDENTIFIER, yytext()); }
@@ -121,7 +120,7 @@ FloatLiteral   = {Float1} | {Float2} | {Float3} | {Float4}
 <CHARACTER> {
     \'                             { yybegin(YYINITIAL); sb.toString(); 
                                         if (sb.length() > 1 ){
-                                            throw new RuntimeException((yyline+1) + ":" + (yycolumn+1) + ":  Only one character is allowed in '', Did you mean to use "" instead? ");} else{
+                                            throw new RuntimeException((yyline+1) + ":" + (yycolumn+1) + ":  Only one character is allowed in '', Did you mean to use double quotation marks instead? ");} else{
                                                 out.println("SINGLE CHARACTER:" + sb.toString());
                                             } 
                                    }
