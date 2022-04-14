@@ -1,0 +1,137 @@
+/**
+ *  This code is part of the lab exercises for the Compilers course
+ *  at Harokopio University of Athens, Dept. of Informatics and Telematics.
+ */
+
+import java_cup.runtime.Symbol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+parser code
+{:
+    private static final Logger LOGGER = LoggerFactory.getLogger(parser.class);
+
+    /** Report a non fatal error (or warning).
+     *
+     * @param message an error message.
+     * @param info    an extra object reserved for use by specialized subclasses.
+     */
+    public void report_error(String message, Object info)
+    {
+        String error = "";
+        if (!(info instanceof Symbol))
+            info = cur_token;
+        if(info instanceof Symbol) {
+            int line = ((Symbol)info).left;
+            int column = ((Symbol)info).right;
+            error = line  + ":" + column;
+        }
+        error += ": " + message;
+        LOGGER.error(error);
+    }
+
+    /** Report a fatal error.
+     *
+     * @param message an error message.
+     * @param info    an extra object reserved for use by specialized subclasses.
+     */
+    public void report_fatal_error(String   message, Object   info) throws java.lang.Exception
+    {
+        /* stop parsing (not really necessary since we throw an exception, but) */
+        done_parsing();
+
+        /* use the normal error message reporting to put out the message */
+        report_error(message, info);
+
+        /* throw an exception */
+        throw new Exception("Can't recover from previous error(s)");
+    }
+
+    public int getLine() {
+        Symbol symbol = (Symbol) cur_token;
+        return symbol.left;
+    }
+
+    public int getColumn() {
+        Symbol symbol = (Symbol) cur_token;
+        return symbol.right;
+    }
+:};
+
+/* voithane to cup na ftiaksi to enumeration */
+terminal java.lang.String IDENTIFIER;       // name
+terminal PRINT, DO, WHILE;
+terminal IF, ELSE;
+terminal VOID, RETURN, BREAK , CONTINUE, STRUCT;
+//terminal BOOL, FLOAT, INT, CHAR;
+terminal LPAREN, RPAREN, SEMICOLON;
+terminal EQ;
+terminal TIMES, DIVISION, MODULUS;
+terminal PLUS, MINUS, UMINUS;
+
+terminal LT, GT, LE, GE, EQEQ, NEQ;
+terminal LCURLY, RCURLY;
+terminal RIGHT_SQUARE, LEFT_SQUARE;
+terminal LAND, LOR, LNOT; 
+terminal DOT, COMMA;
+
+terminal java.lang.Integer   INTEGER_LITERAL;
+terminal java.lang.Double    DOUBLE_LITERAL;
+terminal java.lang.String    STRING_LITERAL;
+terminal java.lang.Boolean   BOOLEAN_LITERAL;
+terminal java.lang.Character CHARACTER_LITERAL;
+
+
+non terminal Expr;
+non terminal Stmt;
+non terminal StmtList;
+non terminal CompUnit;
+non terminal CompoundStmt;
+
+/* oso pio kato toso megaliteri protereotita */
+precedence left EQEQ, NEQ;
+precedence left LT, GT, LE, GE;
+precedence left PLUS, MINUS;
+precedence left TIMES, DIVISION;
+precedence right UMINUS;
+
+start with CompUnit;
+
+/* whitespace OR statement list */
+CompUnit ::= 
+           | StmtList
+           ;
+
+StmtList ::= Stmt
+           | StmtList Stmt
+           ;              
+
+Stmt ::= PRINT LPAREN Expr RPAREN SEMICOLON
+       | IDENTIFIER EQ Expr SEMICOLON
+       | CompoundStmt
+       | DO Stmt WHILE LPAREN Expr RPAREN SEMICOLON
+       | WHILE LPAREN Expr RPAREN Stmt
+       /* | DO LCURLY CompUnit RCURLY WHILE LPAREN Expr RPAREN SEMICOLON */ // alternative
+       ;
+
+CompoundStmt ::= LCURLY RCURLY
+               | LCURLY StmtList RCURLY
+               ;
+
+Expr ::= INTEGER_LITERAL
+       | DOUBLE_LITERAL
+       | STRING_LITERAL
+       | IDENTIFIER
+       | LPAREN Expr RPAREN
+       | Expr PLUS Expr
+       | Expr MINUS Expr
+       | Expr TIMES Expr
+       | Expr DIVISION Expr
+       | Expr LT Expr
+       | Expr GT Expr
+       | Expr LE Expr
+       | Expr GE Expr
+       | Expr EQEQ Expr
+       | Expr NEQ Expr
+       | MINUS Expr %prec UMINUS // allazo tin protereotita se protereotita tou uminus
+       ;
