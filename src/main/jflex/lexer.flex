@@ -71,7 +71,7 @@ FloatLiteral   = {Float1} | {Float2} | {Float3} | {Float4}
     "float"                        { return createSymbol(sym.DOUBLE_SPECIFIER); }
     "int"                          { return createSymbol(sym.INTEGER_SPECIFIER); }
     "char"                         { return createSymbol(sym.CHARACTER_SPECIFIER); }
-    "string"                         { return createSymbol(sym.STRING_SPECIFIER); }
+    "string"                       { return createSymbol(sym.STRING_SPECIFIER); }
 
     /* identifiers */ 
     {Identifier}                   { return createSymbol(sym.IDENTIFIER, yytext()); }
