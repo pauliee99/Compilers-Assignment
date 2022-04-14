@@ -81,6 +81,8 @@ terminal java.lang.String    STRING_LITERAL;
 terminal java.lang.Boolean   BOOLEAN_LITERAL;
 terminal java.lang.Character CHARACTER_LITERAL;
 
+terminal INTEGER_SPECIFIER, BOOLEAN_SPECIFIER, DOUBLE_SPECIFIER, CHARACTER_SPECIFIER, STRING_SPECIFIER;
+
 
 non terminal Expr;
 non terminal Stmt;
