@@ -121,7 +121,7 @@ FloatLiteral   = {Float1} | {Float2} | {Float3} | {Float4}
     \'                             { yybegin(YYINITIAL); sb.toString(); 
                                         if (sb.length() > 1 ){
                                             throw new RuntimeException((yyline+1) + ":" + (yycolumn+1) + ":  Only one character is allowed in '', Did you mean to use double quotation marks instead? ");} else{
-                                                  return createSymbol(sym.CHARACTER_LITERAL, sb.toString()););
+                                                  return createSymbol(sym.CHARACTER_LITERAL, sb.toString());
                                             } 
                                    }
     [^\n\t\0\'\\]+                 { sb.append(yytext()); }
