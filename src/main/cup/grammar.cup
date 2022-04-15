@@ -63,7 +63,7 @@ terminal java.lang.String IDENTIFIER;       // name
 terminal PRINT, DO, WHILE;
 terminal IF, ELSE;
 terminal VOID, RETURN, BREAK , CONTINUE, STRUCT;
-terminal BOOL, FLOAT, INT, CHAR;
+// terminal BOOL, FLOAT, INT, CHAR;
 terminal LPAREN, RPAREN, SEMICOLON;
 terminal EQ;
 terminal TIMES, DIVISION, MODULUS;
@@ -97,7 +97,6 @@ non terminal ParameterList;
 non terminal FunctionDefinition;
 non terminal Definitions;
 
-/* oso pio kato toso megaliteri protereotita */
 precedence left LOR;
 precedence left LAND;
 precedence left EQEQ, NEQ;
@@ -105,7 +104,7 @@ precedence left LT, GT, LE, GE;
 precedence left PLUS, MINUS;
 precedence left TIMES, DIVISION, MODULUS;
 precedence right UMINUS, LNOT;
-precedence left LPAREN, RPAREN, LEFT_SQUARE, RIGHT_SQUARE, DOT; //den ksero an afta rpei na ine edo
+precedence left LPAREN, RPAREN, LEFT_SQUARE, RIGHT_SQUARE, DOT;
 
 start with CompUnit;
 
@@ -113,14 +112,40 @@ start with CompUnit;
 //CompUnit               ::= 
 //                         | StmtList
 //                         ;
-CompUnit               ::= 
-                         | Definitions
+
+CompUnit               ::= Definitions
                          | CompUnit Definitions
                          ;
-
 Definitions            ::= VariableDefinition
                          | FunctionDefinition
                          | StructDefinition
+                         ;                         
+
+FunctionDefinition     ::= TypeSpecifier IDENTIFIER LPAREN ParameterList RPAREN LCURLY StmtList RCURLY
+                         | TypeSpecifier IDENTIFIER LPAREN RPAREN LCURLY StmtList RCURLY
+                         ;                         
+
+ParameterList          ::= ParameterDeclaration
+                         | ParameterList COMMA ParameterDeclaration
+                         ;
+
+ParameterDeclaration   ::= TypeSpecifier IDENTIFIER
+                         | TypeSpecifier LEFT_SQUARE RIGHT_SQUARE IDENTIFIER
+                         ;
+
+TypeSpecifier          ::= CHARACTER_SPECIFIER
+                         | BOOLEAN_SPECIFIER
+                         | INTEGER_SPECIFIER
+                         | DOUBLE_SPECIFIER
+                         | VOID
+                         | STRUCT IDENTIFIER 
+                         ;
+
+VariableDefinition     ::= TypeSpecifier IDENTIFIER SEMICOLON
+                         | TypeSpecifier IDENTIFIER LEFT_SQUARE INTEGER_LITERAL RIGHT_SQUARE SEMICOLON
+                         ;
+
+StructDefinition       ::= STRUCT IDENTIFIER LCURLY VariableDefinition RCURLY SEMICOLON
                          ;
 
 StmtList               ::= Stmt
@@ -138,11 +163,6 @@ Stmt                   ::= PRINT LPAREN Expr RPAREN SEMICOLON
                          | RETURN Expr SEMICOLON
                          | BREAK SEMICOLON
                          | CONTINUE SEMICOLON
-                         | LCURLY StmtList RCURLY
-                         ;
-
-CompoundStmt           ::= LCURLY RCURLY
-                         | LCURLY StmtList RCURLY
                          ;
 
 Expr                   ::= INTEGER_LITERAL
@@ -170,35 +190,14 @@ Expr                   ::= INTEGER_LITERAL
                          | LNOT Expr
                          | Expr LOR Expr
                          | Expr LAND Expr
-                         | MINUS Expr %prec UMINUS // allazo tin protereotita se protereotita tou uminus
+                         | MINUS Expr %prec UMINUS
                          ;
 
-ExprList               ::= Expr
+ExprList               ::= 
+                         | Expr
                          | ExprList COMMA Expr
                          ;
 
-VariableDefinition     ::= TypeSpecifier IDENTIFIER SEMICOLON
-                         | TypeSpecifier IDENTIFIER LEFT_SQUARE INTEGER_LITERAL RIGHT_SQUARE SEMICOLON
-                         ;
-
-StructDefinition       ::= STRUCT IDENTIFIER LCURLY VariableDefinition RCURLY SEMICOLON
-                         ;
-
-TypeSpecifier          ::= CHAR // what
-                         | BOOL // is 
-                         | INT // happening 
-                         | FLOAT // here
-                         | VOID
-                         | STRUCT IDENTIFIER
-                         ;
-
-ParameterDeclaration   ::= TypeSpecifier IDENTIFIER
-                         | TypeSpecifier LEFT_SQUARE RIGHT_SQUARE IDENTIFIER
-                         ;
-
-ParameterList          ::= ParameterDeclaration
-                         | ParameterList COMMA ParameterDeclaration
-                         ;
-
-FunctionDefinition     ::= TypeSpecifier IDENTIFIER LPAREN ParameterList RPAREN LCURLY StmtList RCURLY
+CompoundStmt           ::= LCURLY RCURLY
+                         | LCURLY StmtList RCURLY
                          ;
