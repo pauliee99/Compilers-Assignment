@@ -109,30 +109,22 @@ precedence left LPAREN, RPAREN, LEFT_SQUARE, RIGHT_SQUARE, DOT;
 start with CompUnit;
 
 /* whitespace OR statement list */
-//CompUnit               ::= 
-//                         | StmtList
-//                         ;
-
-CompUnit               ::= Definitions
+CompUnit               ::=  | Definitions
                          | CompUnit Definitions
                          ;
-Definitions            ::= VariableDefinition
-                         | FunctionDefinition
+Definitions            ::= FunctionDefinition
+                         | VariableDefinition
                          | StructDefinition
-                         ;                         
-
+                         ;
 FunctionDefinition     ::= TypeSpecifier IDENTIFIER LPAREN ParameterList RPAREN LCURLY StmtList RCURLY
-                         | TypeSpecifier IDENTIFIER LPAREN RPAREN LCURLY StmtList RCURLY
                          ;                         
-
-ParameterList          ::= ParameterDeclaration
+ParameterList          ::= 
+                         | ParameterDeclaration
                          | ParameterList COMMA ParameterDeclaration
                          ;
-
 ParameterDeclaration   ::= TypeSpecifier IDENTIFIER
                          | TypeSpecifier LEFT_SQUARE RIGHT_SQUARE IDENTIFIER
                          ;
-
 TypeSpecifier          ::= CHARACTER_SPECIFIER
                          | BOOLEAN_SPECIFIER
                          | INTEGER_SPECIFIER
@@ -140,18 +132,14 @@ TypeSpecifier          ::= CHARACTER_SPECIFIER
                          | VOID
                          | STRUCT IDENTIFIER 
                          ;
-
 VariableDefinition     ::= TypeSpecifier IDENTIFIER SEMICOLON
                          | TypeSpecifier IDENTIFIER LEFT_SQUARE INTEGER_LITERAL RIGHT_SQUARE SEMICOLON
                          ;
-
 StructDefinition       ::= STRUCT IDENTIFIER LCURLY VariableDefinition RCURLY SEMICOLON
                          ;
-
 StmtList               ::= Stmt
                          | StmtList Stmt
                          ;
-
 Stmt                   ::= PRINT LPAREN Expr RPAREN SEMICOLON
                          | IDENTIFIER EQ Expr SEMICOLON
                          | CompoundStmt
@@ -164,7 +152,6 @@ Stmt                   ::= PRINT LPAREN Expr RPAREN SEMICOLON
                          | BREAK SEMICOLON
                          | CONTINUE SEMICOLON
                          ;
-
 Expr                   ::= INTEGER_LITERAL
                          | DOUBLE_LITERAL
                          | STRING_LITERAL
@@ -192,12 +179,9 @@ Expr                   ::= INTEGER_LITERAL
                          | Expr LAND Expr
                          | MINUS Expr %prec UMINUS
                          ;
-
-ExprList               ::= 
-                         | Expr
+ExprList               ::= Expr
                          | ExprList COMMA Expr
                          ;
-
 CompoundStmt           ::= LCURLY RCURLY
                          | LCURLY StmtList RCURLY
                          ;
