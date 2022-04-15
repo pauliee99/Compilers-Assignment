@@ -123,21 +123,19 @@ CompUnit               ::= Definitions
 Definitions            ::= VariableDefinition
                          | FunctionDefinition
                          | StructDefinition
-                         ;                         
+                         ;
 
 FunctionDefinition     ::= TypeSpecifier IDENTIFIER LPAREN ParameterList RPAREN LCURLY StmtList RCURLY
-                         | TypeSpecifier IDENTIFIER LPAREN RPAREN LCURLY StmtList RCURLY
-                         ;                         
+                         ;
 
-ParameterList          ::= ParameterDeclaration
+ParameterList          ::= 
+                         | ParameterDeclaration
                          | ParameterList COMMA ParameterDeclaration
                          ;
 
-ParameterDeclaration   ::= 
-                         | TypeSpecifier IDENTIFIER
+ParameterDeclaration   ::= TypeSpecifier IDENTIFIER
                          | TypeSpecifier LEFT_SQUARE RIGHT_SQUARE IDENTIFIER
                          ;
-
 TypeSpecifier          ::= CHARACTER_SPECIFIER
                          | BOOLEAN_SPECIFIER
                          | INTEGER_SPECIFIER
@@ -146,7 +144,7 @@ TypeSpecifier          ::= CHARACTER_SPECIFIER
                          | STRUCT IDENTIFIER
                          ;
 
-VariableDefinitions     ::= VariableDefinition
+VariableDefinitions    ::= VariableDefinition
                          | VariableDefinitions VariableDefinition
                          ;
 
@@ -156,11 +154,9 @@ VariableDefinition     ::= TypeSpecifier IDENTIFIER SEMICOLON
 
 StructDefinition       ::= STRUCT IDENTIFIER LCURLY VariableDefinitions RCURLY SEMICOLON
                          ;
-
 StmtList               ::= Stmt
                          | StmtList Stmt
                          ;
-
 Stmt                   ::= PRINT LPAREN Expr RPAREN SEMICOLON
                          | IDENTIFIER EQ Expr SEMICOLON
                          | CompoundStmt
@@ -176,7 +172,6 @@ Stmt                   ::= PRINT LPAREN Expr RPAREN SEMICOLON
                          | CONTINUE SEMICOLON
                          | VariableDefinition
                          ;
-
 Expr                   ::= INTEGER_LITERAL
                          | DOUBLE_LITERAL
                          | STRING_LITERAL
@@ -204,12 +199,9 @@ Expr                   ::= INTEGER_LITERAL
                          | Expr LAND Expr
                          | MINUS Expr %prec UMINUS
                          ;
-
-ExprList               ::= 
-                         | Expr
+ExprList               ::= Expr
                          | ExprList COMMA Expr
                          ;
-
 CompoundStmt           ::= LCURLY RCURLY
                          | LCURLY StmtList RCURLY
                          ;
