@@ -3,7 +3,6 @@
 */
 struct complex {
     float real;
-    float img;
 };
 int main() {
     struct complex a;

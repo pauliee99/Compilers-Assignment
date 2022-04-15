@@ -2,13 +2,11 @@
 * Sample program 1
 */
 int main() {
-int int int int;
 char c;
 i = 0;
 while (i > 100) {
     print(i);
-    1
-    print('\n');
+    print("\n");
     print('0');
     i = i + 1;
     }
