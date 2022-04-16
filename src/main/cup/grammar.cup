@@ -81,7 +81,7 @@ terminal java.lang.String    STRING_LITERAL;
 terminal java.lang.Boolean   BOOLEAN_LITERAL;
 terminal java.lang.Character CHARACTER_LITERAL;
 
-terminal INTEGER_SPECIFIER, BOOLEAN_SPECIFIER, DOUBLE_SPECIFIER, CHARACTER_SPECIFIER, STRING_SPECIFIER;
+terminal INTEGER_SPECIFIER, BOOLEAN_SPECIFIER, DOUBLE_SPECIFIER, CHARACTER_SPECIFIER;
 
 non terminal Expr;
 non terminal Stmt;
@@ -96,7 +96,9 @@ non terminal ParameterDeclaration;
 non terminal ParameterList;
 non terminal FunctionDefinition;
 non terminal Definitions;
+non terminal VariableDefinitions;
 
+//precedence left INTEGER_SPECIFIER, BOOLEAN_SPECIFIER, DOUBLE_SPECIFIER, CHARACTER_SPECIFIER, STRUCT, VOID;
 precedence left LOR;
 precedence left LAND;
 precedence left EQEQ, NEQ;
@@ -114,44 +116,47 @@ start with CompUnit;
 //                         ;
 
 CompUnit               ::= Definitions
-                         | CompUnit Definitions
+                         | Definitions CompUnit
                          ;
+
+
 Definitions            ::= VariableDefinition
                          | FunctionDefinition
                          | StructDefinition
-                         ;                         
+                         ;
 
 FunctionDefinition     ::= TypeSpecifier IDENTIFIER LPAREN ParameterList RPAREN LCURLY StmtList RCURLY
-                         | TypeSpecifier IDENTIFIER LPAREN RPAREN LCURLY StmtList RCURLY
-                         ;                         
+                         ;
 
-ParameterList          ::= ParameterDeclaration
+ParameterList          ::= 
+                         | ParameterDeclaration
                          | ParameterList COMMA ParameterDeclaration
                          ;
 
 ParameterDeclaration   ::= TypeSpecifier IDENTIFIER
                          | TypeSpecifier LEFT_SQUARE RIGHT_SQUARE IDENTIFIER
                          ;
-
 TypeSpecifier          ::= CHARACTER_SPECIFIER
                          | BOOLEAN_SPECIFIER
                          | INTEGER_SPECIFIER
                          | DOUBLE_SPECIFIER
                          | VOID
-                         | STRUCT IDENTIFIER 
+                         | STRUCT IDENTIFIER
+                         ;
+
+VariableDefinitions    ::= VariableDefinition
+                         | VariableDefinitions VariableDefinition
                          ;
 
 VariableDefinition     ::= TypeSpecifier IDENTIFIER SEMICOLON
                          | TypeSpecifier IDENTIFIER LEFT_SQUARE INTEGER_LITERAL RIGHT_SQUARE SEMICOLON
                          ;
 
-StructDefinition       ::= STRUCT IDENTIFIER LCURLY VariableDefinition RCURLY SEMICOLON
+StructDefinition       ::= STRUCT IDENTIFIER LCURLY VariableDefinitions RCURLY SEMICOLON
                          ;
-
 StmtList               ::= Stmt
                          | StmtList Stmt
                          ;
-
 Stmt                   ::= PRINT LPAREN Expr RPAREN SEMICOLON
                          | IDENTIFIER EQ Expr SEMICOLON
                          | CompoundStmt
@@ -161,10 +166,12 @@ Stmt                   ::= PRINT LPAREN Expr RPAREN SEMICOLON
                          | IF LPAREN Expr RPAREN Stmt ELSE Stmt
                          | Expr SEMICOLON
                          | RETURN Expr SEMICOLON
+                         | RETURN SEMICOLON
+                         | Expr EQ Expr SEMICOLON
                          | BREAK SEMICOLON
                          | CONTINUE SEMICOLON
+                         | VariableDefinition
                          ;
-
 Expr                   ::= INTEGER_LITERAL
                          | DOUBLE_LITERAL
                          | STRING_LITERAL
@@ -192,12 +199,9 @@ Expr                   ::= INTEGER_LITERAL
                          | Expr LAND Expr
                          | MINUS Expr %prec UMINUS
                          ;
-
-ExprList               ::= 
-                         | Expr
+ExprList               ::= Expr
                          | ExprList COMMA Expr
                          ;
-
 CompoundStmt           ::= LCURLY RCURLY
                          | LCURLY StmtList RCURLY
                          ;
