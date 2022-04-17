@@ -9,7 +9,16 @@ public enum Operator {
     PLUS("+"),
     MINUS("-"),
     MULTIPLY("*"),
-    DIVISION("/");
+    DIVISION("/"),
+    EQUAL("=="),
+    NOT_EQUAL("!="),
+    LESS("<"),
+    LESS_EQ("<="),
+    GREATER(">"),
+    GREATER_EQ(">="),
+    LNOT("!"),
+    LOR("||"),
+    LAND("&&");
 
     private String type;
 

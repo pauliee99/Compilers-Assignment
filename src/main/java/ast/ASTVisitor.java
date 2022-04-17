@@ -31,4 +31,12 @@ public interface ASTVisitor {
 
     void visit(ParenthesisExpression node) throws ASTVisitorException;
 
+    void visit(WhileStatement node) throws ASTVisitorException;
+
+    void visit(DoWhileStatement node) throws ASTVisitorException;
+
+    void visit(IfElseStatement node) throws ASTVisitorException;
+
+    void visit(IfStatement node) throws ASTVisitorException;
+
 }

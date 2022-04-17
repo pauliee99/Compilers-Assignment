@@ -8,18 +8,24 @@ import ast.AssignmentStatement;
 import ast.BinaryExpression;
 import ast.CompUnit;
 import ast.CompoundStatement;
+import ast.DoWhileStatement;
 import ast.DoubleLiteralExpression;
 import ast.IdentifierExpression;
+import ast.IfElseStatement;
+import ast.IfStatement;
 import ast.IntegerLiteralExpression;
 import ast.ParenthesisExpression;
 import ast.PrintStatement;
 import ast.Statement;
 import ast.StringLiteralExpression;
 import ast.UnaryExpression;
+import ast.WhileStatement;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
 public class PrintASTVisitor implements ASTVisitor {
+
+    private int levels;
 
     @Override
     public void visit(CompUnit node) throws ASTVisitorException {
@@ -90,11 +96,48 @@ public class PrintASTVisitor implements ASTVisitor {
 
     @Override
     public void visit(CompoundStatement node) throws ASTVisitorException {
+        levels++;
         System.out.println(" { ");
         for(Statement st: node.getStatements()) { 
             st.accept(this);
         }
         System.out.println(" } ");
+        levels--;
+    }
+
+    @Override
+    public void visit(WhileStatement node) throws ASTVisitorException {
+        System.out.print("while ( ");
+        node.getExpression().accept(this);
+        System.out.println(" ) ");
+        node.getStatement().accept(this);
+    }
+
+    @Override
+    public void visit(DoWhileStatement node) throws ASTVisitorException {
+        System.out.println("Do ");
+        node.getStatement().accept(this);
+        System.out.print("while ( ");
+        node.getExpression().accept(this);
+        System.out.println(" ); ");
+    }
+
+    @Override
+    public void visit(IfElseStatement node) throws ASTVisitorException {
+        System.out.print("if ( ");
+        node.getExpression().accept(this);
+        System.out.println(" ) ");
+        node.getStatement1().accept(this);
+        System.out.print("else ");
+        node.getStatement2().accept(this);
+    }
+
+    @Override
+    public void visit(IfStatement node) throws ASTVisitorException {
+        System.out.print("if ( ");
+        node.getExpression().accept(this);
+        System.out.println(" ) ");
+        node.getStatement().accept(this);
     }
 
 }
