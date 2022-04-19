@@ -1,7 +1,3 @@
-/**
- * This code is part of the lab exercises for the Compilers course at Harokopio
- * University of Athens, Dept. of Informatics and Telematics.
- */
 package ast;
 
 import java.util.ArrayList;
@@ -9,23 +5,27 @@ import java.util.List;
 
 public class CompUnit extends ASTNode {
 
-    private List<Statement> statements;
+    private Definitions definitions;
 
-    public CompUnit() {
-        statements = new ArrayList<Statement>();
+    
+
+    public CompUnit(Definitions definitions) {
+        this.setDefinitions(definitions);
     }
 
-    public CompUnit(List<Statement> statements) {
-        this.statements = statements;
+
+
+    public Definitions getDefinitions() {
+        return definitions;
     }
 
-    public List<Statement> getStatements() {
-        return statements;
+
+
+    public void setDefinitions(Definitions definitions) {
+        this.definitions = definitions;
     }
 
-    public void setStatements(List<Statement> statements) {
-        this.statements = statements;
-    }
+
 
     @Override
     public void accept(ASTVisitor visitor) throws ASTVisitorException {

@@ -127,19 +127,19 @@ CompUnit               ::= Definitions:d
 
 Definitions            ::= VariableDefinition:vd
                            {:
-                                RESULT = new CompUnit(vd);
+                                RESULT = new VariableDefinition(vd);
                                 RESULT.setLine(vdleft);
                                 RESULT.setColumn(vdright);
                             :}
                          | FunctionDefinition:
                            {:
-                                RESULT = new CompUnit(fd);
+                                RESULT = new FunctionDefinition(fd);
                                 RESULT.setLine(fdleft);
                                 RESULT.setColumn(fdright);
                             :}
                          | StructDefinition:sd
                            {:
-                                RESULT = new CompUnit(sd);
+                                RESULT = new StructDefinition(sd);
                                 RESULT.setLine(sdleft);
                                 RESULT.setColumn(sdright);
                             :}
@@ -147,26 +147,26 @@ Definitions            ::= VariableDefinition:vd
 
 FunctionDefinition     ::= TypeSpecifier:ts IDENTIFIER:i LPAREN ParameterList:pl RPAREN LCURLY StmtList:sl RCURLY
                            {:
-                                RESULT = new CompUnit(sd);
+                                RESULT = ts;
                                 RESULT.setLine(tsleft);
                                 RESULT.setColumn(tsright);
                             :}
                          ;
 
 ParameterList          ::= 
-                         | ParameterDeclaration
-                         | ParameterList COMMA ParameterDeclaration
+                         | ParameterDeclaration/* TODO */
+                         | ParameterList COMMA ParameterDeclaration/* TODO */
                          ;
 
-ParameterDeclaration   ::= TypeSpecifier IDENTIFIER
-                         | TypeSpecifier LEFT_SQUARE RIGHT_SQUARE IDENTIFIER
+ParameterDeclaration   ::= TypeSpecifier IDENTIFIER/* TODO */
+                         | TypeSpecifier LEFT_SQUARE RIGHT_SQUARE IDENTIFIER/* TODO */
                          ;
-TypeSpecifier          ::= CHARACTER_SPECIFIER
-                         | BOOLEAN_SPECIFIER
-                         | INTEGER_SPECIFIER
-                         | DOUBLE_SPECIFIER
-                         | VOID
-                         | STRUCT IDENTIFIER
+TypeSpecifier          ::= CHARACTER_SPECIFIER {: RESULT = new Type("char") :}
+                         | BOOLEAN_SPECIFIER {: RESULT = new Type("bool") :}
+                         | INTEGER_SPECIFIER {: RESULT = new Type("int") :}
+                         | DOUBLE_SPECIFIER {: RESULT = new Type("float") :}
+                         | VOID {: RESULT = new Type("void") :}
+                         | STRUCT IDENTIFIER {: RESULT = new Type("struct") :}
                          ;
 
 VariableDefinitions    ::= VariableDefinition
@@ -202,7 +202,7 @@ Stmt                   ::= PRINT:p LPAREN Expr:e RPAREN SEMICOLON
                                 RESULT.setLine(idleft);
                                 RESULT.setColumn(idright);
                             :}
-                         | CompoundStmt
+                         | CompoundStmt /* TODO */
                          | DO:d Stmt:s WHILE LPAREN Expr:e RPAREN SEMICOLON
                             {:
                                 RESULT = new DoWhileStatement(e, s);
@@ -227,13 +227,18 @@ Stmt                   ::= PRINT:p LPAREN Expr:e RPAREN SEMICOLON
                                 RESULT.setLine(ileft);
                                 RESULT.setColumn(iright);
                             :}
-                         | Expr:e SEMICOLON 
-                         | RETURN Expr SEMICOLON
-                         | RETURN SEMICOLON
-                         | Expr EQ Expr SEMICOLON
-                         | BREAK SEMICOLON
-                         | CONTINUE SEMICOLON
-                         | VariableDefinition
+                         | Expr:e SEMICOLON //idk
+                            {:
+                                RESULT = new Expression(e);
+                                RESULT.setLine(ileft);
+                                RESULT.setColumn(iright);
+                            :}
+                         | RETURN Expr SEMICOLON /* TODO */
+                         | RETURN SEMICOLON /* TODO */
+                         | Expr EQ Expr SEMICOLON /* TODO */
+                         | BREAK SEMICOLON /* TODO */
+                         | CONTINUE SEMICOLON /* TODO */
+                         | VariableDefinition /* TODO */
                          ;
 Expr                   ::= INTEGER_LITERAL:l
                             {:

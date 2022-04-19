@@ -39,4 +39,14 @@ public interface ASTVisitor {
 
     void visit(IfStatement node) throws ASTVisitorException;
 
+    void visit(VariableDefinition variableDefinition);
+
+    void visit(FunctionDefinition functionDefinition);
+
+    void visit(StructDefinition structDefinition);
+
+    void visit(Definitions definitions);
+
+    void visit(TypeSpecifier typeSpecifier);
+
 }
