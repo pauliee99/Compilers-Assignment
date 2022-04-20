@@ -158,15 +158,50 @@ ParameterList          ::=
                          | ParameterList COMMA ParameterDeclaration/* TODO */
                          ;
 
-ParameterDeclaration   ::= TypeSpecifier IDENTIFIER/* TODO */
+ParameterDeclaration   ::= TypeSpecifier IDENTIFIER
+                            {:
+                                RESULT = (ParameterList) ts;
+                                RESULT.setLine(tsleft);
+                                RESULT.setColumn(tsright);
+                            :}
                          | TypeSpecifier LEFT_SQUARE RIGHT_SQUARE IDENTIFIER/* TODO */
                          ;
-TypeSpecifier          ::= CHARACTER_SPECIFIER {: RESULT = new Type("char") :}
-                         | BOOLEAN_SPECIFIER {: RESULT = new Type("bool") :}
-                         | INTEGER_SPECIFIER {: RESULT = new Type("int") :}
-                         | DOUBLE_SPECIFIER {: RESULT = new Type("float") :}
-                         | VOID {: RESULT = new Type("void") :}
-                         | STRUCT IDENTIFIER {: RESULT = new Type("struct") :}
+TypeSpecifier          ::= CHARACTER_SPECIFIER:cs
+                             {: 
+                                RESULT = new Type("char");
+                                RESULT.setLine(csleft);
+                                RESULT.setColumn(csright);
+                             :}
+                         | BOOLEAN_SPECIFIER:bs
+                            {: 
+                                RESULT = new Type("bool");
+                                RESULT.setLine(bsleft);
+                                RESULT.setColumn(bsright);
+                            :}
+                         | INTEGER_SPECIFIER:is
+                            {: 
+                                RESULT = new Type("int");
+                                RESULT.setLine(isleft);
+                                RESULT.setColumn(isright);
+                            :}
+                         | DOUBLE_SPECIFIER:ds
+                            {: 
+                                RESULT = new Type("float");
+                                RESULT.setLine(dsleft);
+                                RESULT.setColumn(dsright);
+                            :}
+                         | VOID:v
+                            {: 
+                                RESULT = new Type("void");
+                                RESULT.setLine(vleft);
+                                RESULT.setColumn(vright);
+                            :}
+                         | STRUCT:s IDENTIFIER 
+                            {: 
+                                RESULT = new Type("struct");
+                                RESULT.setLine(sleft);
+                                RESULT.setColumn(sright);
+                            :}
                          ;
 
 VariableDefinitions    ::= VariableDefinition
