@@ -39,14 +39,30 @@ public interface ASTVisitor {
 
     void visit(IfStatement node) throws ASTVisitorException;
 
-    void visit(VariableDefinition variableDefinition);
+    void visit(VariableDefinition variableDefinition) throws ASTVisitorException;
 
-    void visit(FunctionDefinition functionDefinition);
+    void visit(FunctionDefinition functionDefinition) throws ASTVisitorException;
 
-    void visit(StructDefinition structDefinition);
+    void visit(StructDefinition structDefinition) throws ASTVisitorException;
 
-    void visit(Definitions definitions);
+    void visit(Definitions definitions) throws ASTVisitorException;
 
-    void visit(TypeSpecifier typeSpecifier);
+    void visit(TypeSpecifier typeSpecifier) throws ASTVisitorException;
+
+    void visit(ReturnStatement returnStatement);
+
+    void visit(BooleanLiteralExpression booleanLiteralExpression);
+
+    void visit(CharacterLiteralExpression characterLiteralExpression);
+
+    void visit(BreakStatement breakStatement);
+
+    void visit(ContinueStatement continueStatement);
+
+    void visit(ParameterDeclaration parameterDeclaration);
+
+    void visit(Identifier identifier);
+
+    void visit(SpecifierExpression specifierExpression);
 
 }
