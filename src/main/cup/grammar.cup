@@ -58,18 +58,16 @@ parser code
     }
 :};
 
-/* voithane to cup na ftiaksi to enumeration */
-terminal java.lang.String IDENTIFIER;       // name
+terminal java.lang.String IDENTIFIER;
 terminal PRINT, DO, WHILE;
 terminal IF, ELSE;
 terminal VOID, RETURN, BREAK , CONTINUE, STRUCT;
-// terminal BOOL, FLOAT, INT, CHAR;
 terminal LPAREN, RPAREN, SEMICOLON;
 terminal EQ;
 terminal TIMES, DIVISION, MODULUS;
 terminal PLUS, MINUS, UMINUS;
 
-terminal LT, GT, LE, GE, EQEQ, NEQ;
+terminal LESS, GREATER, LESS_EQ, GREATER_EQ, EQUAL, NOT_EQUAL;
 terminal LCURLY, RCURLY;
 terminal RIGHT_SQUARE, LEFT_SQUARE;
 terminal LAND, LOR, LNOT; 
@@ -86,7 +84,7 @@ terminal INTEGER_SPECIFIER, BOOLEAN_SPECIFIER, DOUBLE_SPECIFIER, CHARACTER_SPECI
 non terminal Expression Expr;
 non terminal Statement Stmt;
 non terminal List<Statement> StmtList;
-non terminal CompUnit CompUnit;
+non terminal List<Definitions> CompUnit;
 non terminal CompoundStatement CompoundStmt;
 non terminal List<Expression> ExprList;
 non terminal VariableDefinition VariableDefinition;
@@ -101,8 +99,8 @@ non terminal List<VariableDefinition> VariableDefinitions;
 //precedence left INTEGER_SPECIFIER, BOOLEAN_SPECIFIER, DOUBLE_SPECIFIER, CHARACTER_SPECIFIER, STRUCT, VOID;
 precedence left LOR;
 precedence left LAND;
-precedence left EQEQ, NEQ;
-precedence left LT, GT, LE, GE;
+precedence left EQUAL, NOT_EQUAL;
+precedence left LESS, GREATER, LESS_EQ, GREATER_EQ;
 precedence left PLUS, MINUS;
 precedence left TIMES, DIVISION, MODULUS;
 precedence right UMINUS, LNOT;
@@ -113,33 +111,34 @@ start with CompUnit;
 /* whitespace OR statement list */
 CompUnit               ::= Definitions:d
                            {:
-                                RESULT = new CompUnit(d);
+                                RESULT = new Arraylist<Definitions>();
+                                RESULT.add(d);
                                 RESULT.setLine(dleft);
                                 RESULT.setColumn(dright);
                             :}
-                         | Definitions:d CompUnit:cu
+                         | CompUnit:cu Definitions:d 
                            {:
-                                d.add(cu);
-                                RESULT = d;
+                                cu.add(d);
+                                RESULT = cu;
                             :}
                          ;
 
 
 Definitions            ::= VariableDefinition:vd
                            {:
-                                RESULT = new VariableDefinition(vd);
+                                RESULT = new Definitions(vd);
                                 RESULT.setLine(vdleft);
                                 RESULT.setColumn(vdright);
                             :}
-                         | FunctionDefinition:
+                         | FunctionDefinition:fd
                            {:
-                                RESULT = new FunctionDefinition(fd);
+                                RESULT = new Definitions(fd);
                                 RESULT.setLine(fdleft);
                                 RESULT.setColumn(fdright);
                             :}
                          | StructDefinition:sd
                            {:
-                                RESULT = new StructDefinition(sd);
+                                RESULT = new Definitions(sd);
                                 RESULT.setLine(sdleft);
                                 RESULT.setColumn(sdright);
                             :}
@@ -147,7 +146,7 @@ Definitions            ::= VariableDefinition:vd
 
 FunctionDefinition     ::= TypeSpecifier:ts IDENTIFIER:i LPAREN ParameterList:pl RPAREN LCURLY StmtList:sl RCURLY
                            {:
-                                RESULT = ts;
+                                RESULT = new FunctionDefinition(ts, i, pl, sl);
                                 RESULT.setLine(tsleft);
                                 RESULT.setColumn(tsright);
                             :}
@@ -168,50 +167,50 @@ ParameterList          ::=
 
 ParameterDeclaration   ::= TypeSpecifier:ts IDENTIFIER:i
                             {:
-                                RESULT = TypeSpecifier(i);
+                                RESULT = new ParameterDeclarationifier(ts, i);
                                 RESULT.setLine(tsleft);
                                 RESULT.setColumn(tsright);
                             :}
                          | TypeSpecifier:ts LEFT_SQUARE RIGHT_SQUARE IDENTIFIER:i
                             {:
-                                RESULT = TypeSpecifier(i);
+                                RESULT = new ParameterDeclarationifier(ts, i);
                                 RESULT.setLine(tsleft);
                                 RESULT.setColumn(tsright);
                             :}
                          ;
 TypeSpecifier          ::= CHARACTER_SPECIFIER:cs
                              {: 
-                                RESULT = new SpecifierExpression(TypeSpecifier.CHARACTER_SPECIFIER); //Type("char");
+                                RESULT = new Specifier(cs); //Type("char");
                                 RESULT.setLine(csleft);
                                 RESULT.setColumn(csright);
                              :}
                          | BOOLEAN_SPECIFIER:bs
                             {: 
-                                RESULT = new SpecifierExpression(TypeSpecifier.BOOLEAN_SPECIFIER); //Type("bool");
+                                RESULT = new Specifier(bs); //Type("bool");
                                 RESULT.setLine(bsleft);
                                 RESULT.setColumn(bsright);
                             :}
                          | INTEGER_SPECIFIER:is
                             {: 
-                                RESULT = new SpecifierExpression(TypeSpecifier.INTEGER_SPECIFIER); //Type("int");
+                                RESULT = new Specifier(ls); //Type("int");
                                 RESULT.setLine(isleft);
                                 RESULT.setColumn(isright);
                             :}
                          | DOUBLE_SPECIFIER:ds
                             {: 
-                                RESULT = new SpecifierExpression(TypeSpecifier.DOUBLE_SPECIFIER); //Type("float");
+                                RESULT = new Specifier(ds); //Type("float");
                                 RESULT.setLine(dsleft);
                                 RESULT.setColumn(dsright);
                             :}
                          | VOID:v
                             {: 
-                                RESULT = new SpecifierExpression(TypeSpecifier.VOID_SPECIFIER); //Type("void");
+                                RESULT = new Specifier(v); //Type("void");
                                 RESULT.setLine(vleft);
                                 RESULT.setColumn(vright);
                             :}
                          | STRUCT:s IDENTIFIER:i
                             {: 
-                                RESULT = new SpecifierExpression(TypeSpecifier.STRUCT_SPECIFIER, i); //Type("struct");
+                                RESULT = new Specifier(s, i); //Type("struct");
                                 RESULT.setLine(sleft);
                                 RESULT.setColumn(sright);
                             :}
@@ -231,13 +230,13 @@ VariableDefinitions    ::= VariableDefinition:vd
 
 VariableDefinition     ::= TypeSpecifier:ts IDENTIFIER:i SEMICOLON
                             {: 
-                                RESULT = new TypeSpecifier(i);
+                                RESULT = new VariableDefinition(ts,i);
                                 RESULT.setLine(tsleft);
                                 RESULT.setColumn(tsright);
                             :}
                          | TypeSpecifier:ts IDENTIFIER:i LEFT_SQUARE INTEGER_LITERAL:il RIGHT_SQUARE SEMICOLON
                             {: 
-                                RESULT = new TypeSpecifier(i, il);
+                                RESULT = new VariableDefinition(ts,i, il);
                                 RESULT.setLine(tsleft);
                                 RESULT.setColumn(tsright);
                             :}
@@ -245,7 +244,7 @@ VariableDefinition     ::= TypeSpecifier:ts IDENTIFIER:i SEMICOLON
 
 StructDefinition       ::= STRUCT:s IDENTIFIER:i LCURLY VariableDefinitions:vd RCURLY SEMICOLON
                             {: 
-                                RESULT = new TypeSpecifier(i, vd);
+                                RESULT = new StructDefinition(i, vd);
                                 RESULT.setLine(sleft);
                                 RESULT.setColumn(sright);
                             :}
@@ -256,10 +255,10 @@ StmtList               ::= Stmt:s
                                 RESULT.add(s);
                            :}
                         | StmtList:sl Stmt:s
-                          {:
+                           {:
                                 sl.add(s);
                                 RESULT = sl;
-                          :}
+                           :}
                         ;  
 Stmt                   ::= PRINT:p LPAREN Expr:e RPAREN SEMICOLON
                             {:
@@ -305,7 +304,7 @@ Stmt                   ::= PRINT:p LPAREN Expr:e RPAREN SEMICOLON
                             :}
                          | Expr:e SEMICOLON
                             {:
-                                RESULT = new Expression();
+                                RESULT = new Expression(e);
                                 RESULT.setLine(eleft);
                                 RESULT.setColumn(eright);
                             :}
@@ -323,7 +322,7 @@ Stmt                   ::= PRINT:p LPAREN Expr:e RPAREN SEMICOLON
                             :}
                          | Expr:e1 EQ Expr:e2 SEMICOLON
                             {:
-                                RESULT = new Expression(e1, e2);
+                                RESULT = new ExprEqExpr(e1, e2);
                                 RESULT.setLine(e1left);
                                 RESULT.setColumn(e1right);
                             :}
@@ -341,7 +340,7 @@ Stmt                   ::= PRINT:p LPAREN Expr:e RPAREN SEMICOLON
                             :}
                          | VariableDefinition:vd
                             {:
-                                RESULT = new VariableDefinition();
+                                RESULT = new VariableDefinitionStatement(vd);
                                 RESULT.setLine(vdleft);
                                 RESULT.setColumn(vdright);
                             :}
@@ -436,7 +435,12 @@ Expr                   ::= INTEGER_LITERAL:l
                                 RESULT.setLine(e1left);
                                 RESULT.setColumn(e1right);
                             :}
-                         | Expr MODULUS Expr /* TODO */
+                         | Expr:e1 MODULUS Expr:e2
+                            {:
+                                RESULT = new BinaryExpression(Operator.MODULUS, e1, e2);
+                                RESULT.setLine(e1left);
+                                RESULT.setColumn(e1right);
+                            :}
                          | Expr:e1 EQUAL Expr:e2
                             {:
                                 RESULT = new BinaryExpression(Operator.EQUAL, e1, e2);
@@ -475,7 +479,7 @@ Expr                   ::= INTEGER_LITERAL:l
                             :}
                          | LNOT Expr:e
                             {:
-                                RESULT = new BinaryExpression(Operator.LNOT, e);
+                                RESULT = new UnaryExpression(Operator.LNOT, e);
                                 RESULT.setLine(eleft);
                                 RESULT.setColumn(eright);
                             :}
@@ -510,13 +514,13 @@ ExprList               ::= Expr:e
                                 RESULT = el;
                             :}
                          ;
-CompoundStmt           ::= LBRACKET:lb StmtList:sl RBRACKET
+CompoundStmt           ::= LEFT_SQUARE:lb StmtList:sl RIGHT_SQUARE
                             {:
                                 RESULT = new CompoundStatement(sl);
                                 RESULT.setLine(lbleft);
                                 RESULT.setColumn(lbright);
                             :}
-                         | LBRACKET:lb RBRACKET
+                         | LEFT_SQUARE:lb RIGHT_SQUARE
                             {:
                                 RESULT = new CompoundStatement();
                                 RESULT.setLine(lbleft);

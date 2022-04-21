@@ -1,9 +1,8 @@
 package ast;
 
-public class BreakStatement extends ASTNode {
+public class BreakStatement extends Statement {
 
     public BreakStatement() {
-        
     }
 
     @Override

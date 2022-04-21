@@ -1,31 +1,25 @@
 package ast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CompUnit extends ASTNode {
 
-    private Definitions definitions;
+    private List<Definitions> definitions;
 
-    
-
-    public CompUnit(Definitions definitions) {
-        this.setDefinitions(definitions);
+    public CompUnit() {
     }
 
-
-
-    public Definitions getDefinitions() {
-        return definitions;
-    }
-
-
-
-    public void setDefinitions(Definitions definitions) {
+    public CompUnit(List<Definitions> definitions) {
         this.definitions = definitions;
     }
 
+    public List<Definitions> getDefinitions() {
+        return definitions;
+    }
 
+    public void setDefinitions(List<Definitions> definitions) {
+        this.definitions = definitions;
+    }
 
     @Override
     public void accept(ASTVisitor visitor) throws ASTVisitorException {

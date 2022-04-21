@@ -1,18 +1,25 @@
 package ast;
 
-public enum Specifiers {
-
-    INTEGER_SPECIFIER("int"),
-    CHARACTER_SPECIFIER("char"),
-    DOUBLE_SPECIFIER("double"),
-    BOOLEAN_SPECIFIER("bool"),
-    VOID("void"),
-    STRUCT("struct");    
+public class Specifiers extends ASTNode {
 
     private String type;
+    private IdentifierExpression identifier;
 
     private Specifiers(String type) {
         this.type = type;
+    }
+
+    private Specifiers(String type, IdentifierExpression identifier) {
+        this.type = type;
+        this.identifier = identifier;
+    }
+
+    public IdentifierExpression getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(IdentifierExpression identifier) {
+        this.identifier = identifier;
     }
 
     public String getType() {
@@ -20,8 +27,8 @@ public enum Specifiers {
     }
 
     @Override
-    public String toString() {
-        return type;
+    public void accept(ASTVisitor visitor) throws ASTVisitorException {
+        visitor.visit(this);
     }
     
 }

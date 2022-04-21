@@ -6,7 +6,6 @@ public class IfStatement extends Statement {
     private Statement statement;
     
     public IfStatement(Expression expression, Statement statement) {
-        super();
         this.setExpression(expression);
         this.setStatement(statement);
     }

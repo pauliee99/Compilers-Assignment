@@ -47,8 +47,6 @@ public interface ASTVisitor {
 
     void visit(Definitions definitions) throws ASTVisitorException;
 
-    void visit(TypeSpecifier typeSpecifier) throws ASTVisitorException;
-
     void visit(ReturnStatement returnStatement);
 
     void visit(BooleanLiteralExpression booleanLiteralExpression);
@@ -61,8 +59,12 @@ public interface ASTVisitor {
 
     void visit(ParameterDeclaration parameterDeclaration);
 
-    void visit(Identifier identifier);
+    void visit(Expression expression);
 
-    void visit(SpecifierExpression specifierExpression);
+    void visit(ExprEqExpr exprEqExpr);
+
+    void visit(Specifiers specifiers);
+
+    void visit(VariableDefinitionStatement variableDefinitionStatement);
 
 }

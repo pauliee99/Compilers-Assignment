@@ -6,7 +6,6 @@ public class DoWhileStatement extends Statement {
     private Statement statement;
     
     public DoWhileStatement(Expression expression, Statement statement) {
-        super();
         this.setExpression(expression);
         this.setStatement(statement);
     }

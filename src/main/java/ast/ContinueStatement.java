@@ -1,9 +1,8 @@
 package ast;
 
-public class ContinueStatement extends ASTNode {
+public class ContinueStatement extends Statement {
 
     public ContinueStatement() {
-
     }
 
     @Override

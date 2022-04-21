@@ -94,12 +94,12 @@ FloatLiteral   = {Float1} | {Float2} | {Float3} | {Float4}
     "("                            { return createSymbol(sym.LPAREN); }
     ")"                            { return createSymbol(sym.RPAREN); }
     ";"                            { return createSymbol(sym.SEMICOLON); }
-    "<"                            { return createSymbol(sym.LT); }
-    ">"                            { return createSymbol(sym.GT); }
-    "<="                           { return createSymbol(sym.LE); }
-    ">="                           { return createSymbol(sym.GE); }
-    "=="                           { return createSymbol(sym.EQEQ); }
-    "!="                           { return createSymbol(sym.NEQ); }
+    "<"                            { return createSymbol(sym.LESS); }
+    ">"                            { return createSymbol(sym.GREATER); }
+    "<="                           { return createSymbol(sym.LESS_EQ); }
+    ">="                           { return createSymbol(sym.GREATER_EQ); }
+    "=="                           { return createSymbol(sym.EQUAL); }
+    "!="                           { return createSymbol(sym.NOT_EQUAL); }
     "{"                            { return createSymbol(sym.LCURLY); }
     "}"                            { return createSymbol(sym.RCURLY); }
     "["                            { return createSymbol(sym.LEFT_SQUARE); }

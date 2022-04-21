@@ -12,32 +12,31 @@ public class Definitions extends ASTNode {
         this.setFunctionDefinition(functionDefinition);
         this.setVariableDefinition(variableDefinition);
     }
-
-    
+    public Definitions(VariableDefinition variableDefinition) {
+        this.setVariableDefinition(variableDefinition);
+    }
+    public Definitions(StructDefinition structDefinition) {
+        this.setStructDefinition(structDefinition);
+    }
+    public Definitions(FunctionDefinition functionDefinition) {
+        this.setFunctionDefinition(functionDefinition);
+    }
 
     public VariableDefinition getVariableDefinition() {
         return variableDefinition;
     }
 
-
-
     public void setVariableDefinition(VariableDefinition variableDefinition) {
         this.variableDefinition = variableDefinition;
     }
-
-
 
     public FunctionDefinition getFunctionDefinition() {
         return functionDefinition;
     }
 
-
-
     public void setFunctionDefinition(FunctionDefinition functionDefinition) {
         this.functionDefinition = functionDefinition;
     }
-
-
 
     public StructDefinition getStructDefinition() {
         return structDefinition;

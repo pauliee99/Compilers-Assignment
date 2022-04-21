@@ -7,7 +7,6 @@ public class IfElseStatement extends Statement {
     private Statement statement2;
     
     public IfElseStatement(Expression expression, Statement statement1, Statement statement2) {
-        super();
         this.setExpression(expression);
         this.setStatement1(statement1);
         this.setStatement2(statement2);
