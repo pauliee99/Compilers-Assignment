@@ -67,4 +67,6 @@ public interface ASTVisitor {
 
     void visit(VariableDefinitionStatement node) throws ASTVisitorException;
 
+    void visit(VarDeclarationStatement varDeclarationStatement) throws ASTVisitorException;
+
 }

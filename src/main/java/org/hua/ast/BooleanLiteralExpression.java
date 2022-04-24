@@ -1,4 +1,4 @@
-package ast;
+package org.hua.ast;
 
 public class BooleanLiteralExpression extends ASTNode {
 

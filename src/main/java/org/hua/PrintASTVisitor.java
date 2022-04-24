@@ -1,3 +1,5 @@
+package org.hua;
+
 /**
  * This code is part of the lab exercises for the Compilers course at Harokopio
  * University of Athens, Dept. of Informatics and Telematics.
@@ -13,6 +15,7 @@ import org.hua.ast.PrintStatement;
 import org.hua.ast.Statement;
 import org.hua.ast.StringLiteralExpression;
 import org.hua.ast.UnaryExpression;
+import org.hua.ast.VarDeclarationStatement;
 import org.hua.ast.WhileStatement;
 import org.hua.ast.BooleanLiteralExpression;
 import org.hua.ast.BreakStatement;
@@ -233,6 +236,12 @@ public class PrintASTVisitor implements ASTVisitor {
 
     @Override
     public void visit(VariableDefinitionStatement node) throws ASTVisitorException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(VarDeclarationStatement varDeclarationStatement) throws ASTVisitorException {
         // TODO Auto-generated method stub
         
     }

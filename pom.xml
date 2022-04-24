@@ -169,6 +169,8 @@
                 <configuration>
                     <mainClass>java_cup.Main</mainClass>
                     <arguments>
+                        <argument>-expect</argument>
+                        <argument>1</argument>
                         <argument>-package</argument>
                         <argument>org.hua</argument>
                         <argument>-destdir</argument>

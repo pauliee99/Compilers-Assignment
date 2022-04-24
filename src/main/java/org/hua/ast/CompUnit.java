@@ -1,30 +1,24 @@
-/**
- * This code is part of the lab exercises for the Compilers course at Harokopio
- * University of Athens, Dept. of Informatics and Telematics.
- */
 package org.hua.ast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CompUnit extends ASTNode {
 
-    private List<Statement> statements;
+    private List<Definitions> definitions;
 
     public CompUnit() {
-        statements = new ArrayList<Statement>();
     }
 
-    public CompUnit(List<Statement> statements) {
-        this.statements = statements;
+    public CompUnit(List<Definitions> definitions) {
+        this.definitions = definitions;
     }
 
-    public List<Statement> getStatements() {
-        return statements;
+    public List<Definitions> getDefinitions() {
+        return definitions;
     }
 
-    public void setStatements(List<Statement> statements) {
-        this.statements = statements;
+    public void setDefinitions(List<Definitions> definitions) {
+        this.definitions = definitions;
     }
 
     @Override
