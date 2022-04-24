@@ -159,13 +159,18 @@ public class SymTableBuilderASTVisitor implements ASTVisitor {
 
 	@Override
 	public void visit(IfElseStatement node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
+		node.getExpression().accept(this);
+		node.getStatement1().accept(this);
+		node.getStatement2().accept(this);
 		
 	}
 
 	@Override
 	public void visit(IfStatement node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
+		node.getExpression().accept(this);
+		node.getStatement().accept(this);
 		
 	}
 
@@ -213,13 +218,13 @@ public class SymTableBuilderASTVisitor implements ASTVisitor {
 
 	@Override
 	public void visit(BreakStatement node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
 		
 	}
 
 	@Override
 	public void visit(ContinueStatement node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
 		
 	}
 
