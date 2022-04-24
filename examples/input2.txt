@@ -1,16 +1,4 @@
-/*
-* Sample program 2
-*/
-struct complex {
-    float real;
-    float img;
-};
-int main() {
-    struct complex a;
-    a.real = 5;
-    a.img = 10;
-    print("Real part:");
-    print(a.real);
-    print("Imaginary part:");
-    print(a.img);
-}
+/* Example 1 */
+x = 4.0e-2; 
+y = 100 * x * x + 7 * x + .3; 
+print(-y/2.0);

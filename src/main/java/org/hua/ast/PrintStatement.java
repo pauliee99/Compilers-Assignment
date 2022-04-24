@@ -2,13 +2,13 @@
  * This code is part of the lab exercises for the Compilers course at Harokopio
  * University of Athens, Dept. of Informatics and Telematics.
  */
-package ast;
+package org.hua.ast;
 
-public class ParenthesisExpression extends Expression {
+public class PrintStatement extends Statement {
 
     private Expression expression;
 
-    public ParenthesisExpression(Expression expression) {
+    public PrintStatement(Expression expression) {
         this.expression = expression;
     }
 

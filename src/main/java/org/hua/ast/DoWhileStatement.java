@@ -2,14 +2,24 @@
  * This code is part of the lab exercises for the Compilers course at Harokopio
  * University of Athens, Dept. of Informatics and Telematics.
  */
-package ast;
+package org.hua.ast;
 
-public class PrintStatement extends Statement {
+public class DoWhileStatement extends Statement {
 
     private Expression expression;
+    private Statement statement;
 
-    public PrintStatement(Expression expression) {
+    public DoWhileStatement(Expression expression, Statement statement) {
         this.expression = expression;
+        this.statement = statement;
+    }
+
+    public Statement getStatement() {
+        return statement;
+    }
+
+    public void setStatement(Statement statement) {
+        this.statement = statement;
     }
 
     public Expression getExpression() {

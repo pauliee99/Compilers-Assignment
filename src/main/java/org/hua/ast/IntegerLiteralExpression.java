@@ -2,21 +2,21 @@
  * This code is part of the lab exercises for the Compilers course at Harokopio
  * University of Athens, Dept. of Informatics and Telematics.
  */
-package ast;
+package org.hua.ast;
 
-public class StringLiteralExpression extends Expression {
+public class IntegerLiteralExpression extends Expression {
 
-    private String literal;
+    private Integer literal;
 
-    public StringLiteralExpression(String literal) {
+    public IntegerLiteralExpression(Integer literal) {
         this.literal = literal;
     }
 
-    public String getLiteral() {
+    public Integer getLiteral() {
         return literal;
     }
 
-    public void setLiteral(String literal) {
+    public void setLiteral(Integer literal) {
         this.literal = literal;
     }
 

@@ -2,7 +2,7 @@
  * This code is part of the lab exercises for the Compilers course at Harokopio
  * University of Athens, Dept. of Informatics and Telematics.
  */
-package ast;
+package org.hua.ast;
 
 /**
  * Abstract syntax tree visitor.
@@ -39,32 +39,32 @@ public interface ASTVisitor {
 
     void visit(IfStatement node) throws ASTVisitorException;
 
-    void visit(VariableDefinition variableDefinition) throws ASTVisitorException;
+    void visit(VariableDefinition node) throws ASTVisitorException;
 
-    void visit(FunctionDefinition functionDefinition) throws ASTVisitorException;
+    void visit(FunctionDefinition node) throws ASTVisitorException;
 
-    void visit(StructDefinition structDefinition) throws ASTVisitorException;
+    void visit(StructDefinition node) throws ASTVisitorException;
 
-    void visit(Definitions definitions) throws ASTVisitorException;
+    void visit(Definitions node) throws ASTVisitorException;
 
-    void visit(ReturnStatement returnStatement);
+    void visit(ReturnStatement node) throws ASTVisitorException;
 
-    void visit(BooleanLiteralExpression booleanLiteralExpression);
+    void visit(BooleanLiteralExpression node) throws ASTVisitorException;
+    
+    void visit(CharacterLiteralExpression node) throws ASTVisitorException;
 
-    void visit(CharacterLiteralExpression characterLiteralExpression);
+    void visit(BreakStatement node) throws ASTVisitorException;
 
-    void visit(BreakStatement breakStatement);
+    void visit(ContinueStatement node) throws ASTVisitorException;
 
-    void visit(ContinueStatement continueStatement);
+    void visit(ParameterDeclaration node) throws ASTVisitorException;
 
-    void visit(ParameterDeclaration parameterDeclaration);
+    void visit(Expression node) throws ASTVisitorException;
 
-    void visit(Expression expression);
+    void visit(ExprEqExpr node) throws ASTVisitorException;
 
-    void visit(ExprEqExpr exprEqExpr);
+    void visit(Specifiers node) throws ASTVisitorException;
 
-    void visit(Specifiers specifiers);
-
-    void visit(VariableDefinitionStatement variableDefinitionStatement);
+    void visit(VariableDefinitionStatement node) throws ASTVisitorException;
 
 }

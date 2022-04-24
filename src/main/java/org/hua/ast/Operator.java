@@ -2,7 +2,7 @@
  * This code is part of the lab exercises for the Compilers course at Harokopio
  * University of Athens, Dept. of Informatics and Telematics.
  */
-package ast;
+package org.hua.ast;
 
 public enum Operator {
 
@@ -10,17 +10,14 @@ public enum Operator {
     MINUS("-"),
     MULTIPLY("*"),
     DIVISION("/"),
-    EQUAL("=="),
-    NOT_EQUAL("!="),
     LESS("<"),
-    LESS_EQ("<="),
+    LESS_EQUAL("<="),
     GREATER(">"),
-    GREATER_EQ(">="),
-    LNOT("!"),
-    LOR("||"),
-    LAND("&&");
+    GREATER_EQUAL(">="),
+    EQUAL("=="),
+    NOT_EQUAL("!=");
 
-    private String type;
+    private final String type;
 
     private Operator(String type) {
         this.type = type;

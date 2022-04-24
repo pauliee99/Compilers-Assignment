@@ -1,6 +1,7 @@
+package org.hua; 
 
-import ast.ASTNode;
-import ast.ASTVisitor;
+import org.hua.ast.ASTNode;
+import org.hua.ast.ASTVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +47,10 @@ public class Compiler {
                     ASTVisitor printVisitor = new PrintASTVisitor();
                     compUnit.accept(printVisitor);
                     
+                    // build symbol table
+                    ASTVisitor symTableVisitor = new SymTableBuilderASTVisitor();
+                    compUnit.accept(symTableVisitor);
+                    
                     LOGGER.info("Compilation done");
                 } catch (java.io.FileNotFoundException e) {
                     LOGGER.error("File not found : \"" + args[i] + "\"");
@@ -54,7 +59,6 @@ public class Compiler {
                     LOGGER.error(e.toString());
                 } catch (Exception e) {
                     LOGGER.error(e.getMessage());
-                    //e.printStackTrace();
                 }
             }
         }

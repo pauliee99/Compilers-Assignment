@@ -2,16 +2,24 @@
  * This code is part of the lab exercises for the Compilers course at Harokopio
  * University of Athens, Dept. of Informatics and Telematics.
  */
-package ast;
+package org.hua.ast;
 
-public abstract class Expression extends ASTNode {
+public class AssignmentStatement extends Statement {
 
+    private String identifier;
     private Expression expression;
 
-    public Expression(Expression expression) {
+    public AssignmentStatement(String identifier, Expression expression) {
+        this.identifier = identifier;
         this.expression = expression;
     }
-    public Expression() {
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public Expression getExpression() {
@@ -22,10 +30,9 @@ public abstract class Expression extends ASTNode {
         this.expression = expression;
     }
 
-
     @Override
     public void accept(ASTVisitor visitor) throws ASTVisitorException {
         visitor.visit(this);
-        
     }
+
 }

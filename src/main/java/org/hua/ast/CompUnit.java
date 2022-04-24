@@ -2,20 +2,20 @@
  * This code is part of the lab exercises for the Compilers course at Harokopio
  * University of Athens, Dept. of Informatics and Telematics.
  */
-package ast;
+package org.hua.ast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompoundStatement extends Statement {
+public class CompUnit extends ASTNode {
 
     private List<Statement> statements;
 
-    public CompoundStatement() {
-        this.statements = new ArrayList<Statement>();
+    public CompUnit() {
+        statements = new ArrayList<Statement>();
     }
 
-    public CompoundStatement(List<Statement> statements) {
+    public CompUnit(List<Statement> statements) {
         this.statements = statements;
     }
 

@@ -2,16 +2,14 @@
  * This code is part of the lab exercises for the Compilers course at Harokopio
  * University of Athens, Dept. of Informatics and Telematics.
  */
-package ast;
+package org.hua.ast;
 
-public class AssignmentStatement extends Statement {
+public class IdentifierExpression extends Expression {
 
     private String identifier;
-    private Expression expression;
 
-    public AssignmentStatement(String identifier, Expression expression) {
+    public IdentifierExpression(String identifier) {
         this.identifier = identifier;
-        this.expression = expression;
     }
 
     public String getIdentifier() {
@@ -20,14 +18,6 @@ public class AssignmentStatement extends Statement {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
-    }
-
-    public Expression getExpression() {
-        return expression;
-    }
-
-    public void setExpression(Expression expression) {
-        this.expression = expression;
     }
 
     @Override

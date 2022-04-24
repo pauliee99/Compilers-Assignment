@@ -1,13 +1,17 @@
-package ast;
+/**
+ * This code is part of the lab exercises for the Compilers course at Harokopio
+ * University of Athens, Dept. of Informatics and Telematics.
+ */
+package org.hua.ast;
 
-public class DoWhileStatement extends Statement {
+public class WhileStatement extends Statement {
 
     private Expression expression;
     private Statement statement;
-    
-    public DoWhileStatement(Expression expression, Statement statement) {
-        this.setExpression(expression);
-        this.setStatement(statement);
+
+    public WhileStatement(Expression expression, Statement statement) {
+        this.expression = expression;
+        this.statement = statement;
     }
 
     public Statement getStatement() {
@@ -29,7 +33,6 @@ public class DoWhileStatement extends Statement {
     @Override
     public void accept(ASTVisitor visitor) throws ASTVisitorException {
         visitor.visit(this);
-        
     }
-    
+
 }
