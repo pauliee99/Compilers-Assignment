@@ -32,6 +32,7 @@ import ast.StringLiteralExpression;
 import ast.StructDefinition;
 import ast.UnaryExpression;
 import ast.VariableDefinition;
+import ast.VariableDefinitionStatement;
 import ast.WhileStatement;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -227,6 +228,12 @@ public class PrintASTVisitor implements ASTVisitor {
 
     @Override
     public void visit(Specifiers specifiers) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(VariableDefinitionStatement variableDefinitionStatement) {
         // TODO Auto-generated method stub
         
     }
