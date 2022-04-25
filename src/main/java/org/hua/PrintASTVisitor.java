@@ -41,6 +41,7 @@ public class PrintASTVisitor implements ASTVisitor {
 
     @Override
     public void visit(CompUnit node) throws ASTVisitorException {
+
         for (Definitions d : node.getDefinitions()) {
             d.accept(this);
         }
@@ -113,6 +114,7 @@ public class PrintASTVisitor implements ASTVisitor {
         printIdentation();
         levels++;
         System.out.println(" { ");
+        levels++;
         for(Statement st: node.getStatements()) { 
             st.accept(this);
         }
@@ -136,6 +138,7 @@ public class PrintASTVisitor implements ASTVisitor {
         printIdentation();
         System.out.println("Do ");
         node.getStatement().accept(this);
+        printIdentation();
         System.out.print("while ( ");
         node.getExpression().accept(this);
         System.out.println(" ); ");
