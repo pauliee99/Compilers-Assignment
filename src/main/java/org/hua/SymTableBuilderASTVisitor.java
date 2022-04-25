@@ -159,97 +159,116 @@ public class SymTableBuilderASTVisitor implements ASTVisitor {
 
 	@Override
 	public void visit(IfElseStatement node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
+		node.getExpression().accept(this);
+		node.getStatement1().accept(this);
+		node.getStatement2().accept(this);
 		
 	}
 
 	@Override
 	public void visit(IfStatement node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
+		node.getExpression().accept(this);
+		node.getStatement().accept(this);
 		
 	}
 
 	@Override
 	public void visit(VariableDefinition node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
+		node.getTypeSpecifier().accept(this);
+		node.getIdentifier().accept(this);
 		
 	}
 
 	@Override
 	public void visit(FunctionDefinition node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
+		node.getTypeSpecifier().accept(this);
+		node.getIdentifier().accept(this);
 		
 	}
 
 	@Override
 	public void visit(StructDefinition node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		node.getIdentifier().accept(this);
 		
 	}
 
 	@Override
 	public void visit(Definitions node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
+		node.getFunctionDefinition().accept(this);
+		node.getStructDefinition().accept(this);
+		node.getVariableDefinition().accept(this);
 		
 	}
 
 	@Override
 	public void visit(ReturnStatement node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
+		node.getExpression().accept(this);
 		
 	}
 
 	@Override
 	public void visit(BooleanLiteralExpression node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
 		
 	}
 
 	@Override
 	public void visit(CharacterLiteralExpression node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
 		
 	}
 
 	@Override
 	public void visit(BreakStatement node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
 		
 	}
 
 	@Override
 	public void visit(ContinueStatement node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
 		
 	}
 
 	@Override
 	public void visit(ParameterDeclaration node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
+		node.getTypeSpecifier().accept(this);
+		node.getIdentifier().accept(this);
 		
 	}
 
 	@Override
 	public void visit(Expression node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
 		
 	}
 
 	@Override
 	public void visit(ExprEqExpr node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
+		node.getExpression1().accept(this);
+		node.getExpression2().accept(this);
 		
 	}
 
 	@Override
 	public void visit(Specifiers node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
+		node.getIdentifier().accept(this);
 		
 	}
 
 	@Override
 	public void visit(VariableDefinitionStatement node) throws ASTVisitorException {
-		// TODO Auto-generated method stub
+		ASTUtils.setSymbolTable(node, stack.element());
+		node.getVariableDefinition().accept(this);
 		
 	}
 

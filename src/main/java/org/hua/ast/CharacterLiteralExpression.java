@@ -2,18 +2,18 @@ package org.hua.ast;
 
 public class CharacterLiteralExpression extends Expression {
 
-    private Character character;
+    private Character literal;
 
-    public CharacterLiteralExpression(Character character) {
-        this.setCharacter(character);
+    public CharacterLiteralExpression(Character literal) {
+        this.setLiteral(literal);
     }
 
-    public Character getCharacter() {
-        return character;
+    public Character getLiteral() {
+        return literal;
     }
 
-    public void setCharacter(Character character) {
-        this.character = character;
+    public void setLiteral(Character literal) {
+        this.literal = literal;
     }
 
     @Override

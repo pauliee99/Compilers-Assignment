@@ -1,9 +1,5 @@
 package org.hua;
 
-/**
- * This code is part of the lab exercises for the Compilers course at Harokopio
- * University of Athens, Dept. of Informatics and Telematics.
- */
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.hua.ast.ASTVisitor;
 import org.hua.ast.ASTVisitorException;
@@ -52,6 +48,7 @@ public class PrintASTVisitor implements ASTVisitor {
 
     @Override
     public void visit(AssignmentStatement node) throws ASTVisitorException {
+        printIdentation();
         System.out.print(node.getIdentifier());
         System.out.print(" = ");
         node.getExpression().accept(this);
@@ -60,6 +57,7 @@ public class PrintASTVisitor implements ASTVisitor {
 
     @Override
     public void visit(PrintStatement node) throws ASTVisitorException {
+        printIdentation();
         System.out.print("print( ");
         node.getExpression().accept(this);
         System.out.println(" );");
@@ -112,17 +110,21 @@ public class PrintASTVisitor implements ASTVisitor {
 
     @Override
     public void visit(CompoundStatement node) throws ASTVisitorException {
+        printIdentation();
         levels++;
         System.out.println(" { ");
         for(Statement st: node.getStatements()) { 
             st.accept(this);
         }
+        System.out.println("");
+        printIdentation();
         System.out.println(" } ");
         levels--;
     }
 
     @Override
     public void visit(WhileStatement node) throws ASTVisitorException {
+        printIdentation();
         System.out.print("while ( ");
         node.getExpression().accept(this);
         System.out.println(" ) ");
@@ -131,6 +133,7 @@ public class PrintASTVisitor implements ASTVisitor {
 
     @Override
     public void visit(DoWhileStatement node) throws ASTVisitorException {
+        printIdentation();
         System.out.println("Do ");
         node.getStatement().accept(this);
         System.out.print("while ( ");
@@ -140,6 +143,7 @@ public class PrintASTVisitor implements ASTVisitor {
 
     @Override
     public void visit(IfElseStatement node) throws ASTVisitorException {
+        printIdentation();
         System.out.print("if ( ");
         node.getExpression().accept(this);
         System.out.println(" ) ");
@@ -150,99 +154,135 @@ public class PrintASTVisitor implements ASTVisitor {
 
     @Override
     public void visit(IfStatement node) throws ASTVisitorException {
+        printIdentation();
         System.out.print("if ( ");
         node.getExpression().accept(this);
         System.out.println(" ) ");
+        levels++;
         node.getStatement().accept(this);
+        levels--;
+        System.out.println("");
     }
 
     @Override
     public void visit(VariableDefinition node) throws ASTVisitorException {
+        printIdentation();
         node.getTypeSpecifier().accept(this);
         node.getIdentifier().accept(this);
     }
 
     @Override
-    public void visit(FunctionDefinition functionDefinition) throws ASTVisitorException {
+    public void visit(FunctionDefinition node) throws ASTVisitorException {
+        printIdentation();
+        node.getTypeSpecifier().accept(this);
+        node.getIdentifier().accept(this);
+        System.out.print("(");
+        node.getParameters();
+        System.out.println(") {");
+        node.getStatements();
+        System.out.print("}");
+    }
+
+    @Override
+    public void visit(StructDefinition node) throws ASTVisitorException {
+        System.out.print("struct");
+        node.getIdentifier().accept(this);
+        System.out.println(" {");
+        node.getVariableDefinition();
+        System.out.println("};");
+        
+    }
+
+    @Override
+    public void visit(Definitions node) throws ASTVisitorException {
+        node.getFunctionDefinition();
+        node.getVariableDefinition();
+        node.getStructDefinition();
+        //////////////////////////
+    }
+
+    @Override
+    public void visit(ReturnStatement node) throws ASTVisitorException {
+        printIdentation();
+        System.out.print("return");
+        node.getExpression().accept(this);
+        System.out.println(";");
+        
+    }
+
+    @Override
+    public void visit(BooleanLiteralExpression node) {
+        System.out.print(node.getLiteral());
+        
+    }
+
+    @Override
+    public void visit(CharacterLiteralExpression node) {
+        System.out.print("\'");
+        System.out.print(node.getLiteral());
+        System.out.print("\'");
+        
+    }
+
+    @Override
+    public void visit(BreakStatement node) throws ASTVisitorException {
+        printIdentation();
+        System.out.print("break;");
+        
+    }
+
+    @Override
+    public void visit(ContinueStatement node) throws ASTVisitorException {
+        printIdentation();
+        System.out.print("continue;");
+        
+    }
+
+    @Override
+    public void visit(ParameterDeclaration node) {
+        node.getTypeSpecifier();
+        node.getIdentifier();
+        
+    }
+
+    @Override
+    public void visit(Expression node) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void visit(StructDefinition structDefinition) throws ASTVisitorException {
-        // TODO Auto-generated method stub
+    public void visit(ExprEqExpr node) {
+        node.getExpression1();
+        System.out.print(" = ");
+        node.getExpression2();
+        System.out.println(";");
         
     }
 
     @Override
-    public void visit(Definitions definitions) throws ASTVisitorException {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void visit(ReturnStatement returnStatement) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void visit(BooleanLiteralExpression booleanLiteralExpression) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void visit(CharacterLiteralExpression characterLiteralExpression) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void visit(BreakStatement breakStatement) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void visit(ContinueStatement continueStatement) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void visit(ParameterDeclaration parameterDeclaration) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void visit(Expression expression) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void visit(ExprEqExpr exprEqExpr) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void visit(Specifiers specifiers) {
-        // TODO Auto-generated method stub
+    public void visit(Specifiers node) {
+        node.getType();
+        node.getIdentifier();
+        System.out.println(";");
         
     }
 
     @Override
     public void visit(VariableDefinitionStatement node) throws ASTVisitorException {
-        // TODO Auto-generated method stub
+        node.getVariableDefinition();
         
     }
 
     @Override
-    public void visit(VarDeclarationStatement varDeclarationStatement) throws ASTVisitorException {
-        // TODO Auto-generated method stub
+    public void visit(VarDeclarationStatement node) throws ASTVisitorException {
+        node.getIdentifier();
         
+    }
+
+    private void printIdentation() {
+        for (int i=0; i<levels; i++){
+            System.out.print("    ");
+        }
     }
 }

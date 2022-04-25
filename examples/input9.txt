@@ -1,9 +1,0 @@
-/* Example 9 */
-var x;
-
-x = 0;
-while(x != 10) { 
-    print("x = " + x + "\n");
-    x = x + 1;
-}
-
