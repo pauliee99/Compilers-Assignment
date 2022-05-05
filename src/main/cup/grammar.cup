@@ -1,0 +1,529 @@
+/**
+ *  This code is part of the lab exercises for the Compilers course
+ *  at Harokopio University of Athens, Dept. of Informatics and Telematics.
+ */
+
+import java_cup.runtime.Symbol;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+parser code
+{:
+    private static final Logger LOGGER = LoggerFactory.getLogger(parser.class);
+
+    /** Report a non fatal error (or warning).
+     *
+     * @param message an error message.
+     * @param info    an extra object reserved for use by specialized subclasses.
+     */
+    public void report_error(String message, Object info)
+    {
+        String error = "";
+        if (!(info instanceof Symbol))
+            info = cur_token;
+        if(info instanceof Symbol) {
+            int line = ((Symbol)info).left;
+            int column = ((Symbol)info).right;
+            error = line  + ":" + column;
+        }
+        error += ": " + message;
+        LOGGER.error(error);
+    }
+
+    /** Report a fatal error.
+     *
+     * @param message an error message.
+     * @param info    an extra object reserved for use by specialized subclasses.
+     */
+    public void report_fatal_error(String   message, Object   info) throws java.lang.Exception
+    {
+        /* stop parsing (not really necessary since we throw an exception, but) */
+        done_parsing();
+
+        /* use the normal error message reporting to put out the message */
+        report_error(message, info);
+
+        /* throw an exception */
+        throw new Exception("Can't recover from previous error(s)");
+    }
+
+    public int getLine() {
+        Symbol symbol = (Symbol) cur_token;
+        return symbol.left;
+    }
+
+    public int getColumn() {
+        Symbol symbol = (Symbol) cur_token;
+        return symbol.right;
+    }
+:};
+
+terminal java.lang.String IDENTIFIER;
+terminal PRINT, DO, WHILE;
+terminal IF, ELSE;
+terminal VOID, RETURN, BREAK , CONTINUE, STRUCT;
+terminal LPAREN, RPAREN, SEMICOLON;
+terminal EQ;
+terminal TIMES, DIVISION, MODULUS;
+terminal PLUS, MINUS, UMINUS;
+
+terminal LESS, GREATER, LESS_EQ, GREATER_EQ, EQUAL, NOT_EQUAL;
+terminal LCURLY, RCURLY;
+terminal RIGHT_SQUARE, LEFT_SQUARE;
+terminal LAND, LOR, LNOT; 
+terminal DOT, COMMA;
+
+terminal java.lang.Integer   INTEGER_LITERAL;
+terminal java.lang.Double    DOUBLE_LITERAL;
+terminal java.lang.String    STRING_LITERAL;
+terminal java.lang.Boolean   BOOLEAN_LITERAL;
+terminal java.lang.Character CHARACTER_LITERAL;
+
+terminal INTEGER_SPECIFIER, BOOLEAN_SPECIFIER, DOUBLE_SPECIFIER, CHARACTER_SPECIFIER;
+
+non terminal Expression Expr;
+non terminal Statement Stmt;
+non terminal List<Statement> StmtList;
+non terminal List<Definitions> CompUnit;
+non terminal CompoundStatement CompoundStmt;
+non terminal List<Expression> ExprList;
+non terminal VariableDefinition VariableDefinition;
+non terminal StructDefinition StructDefinition;
+non terminal TypeSpecifier TypeSpecifier;
+non terminal ParameterDeclaration ParameterDeclaration;
+non terminal List<ParameterDeclaration> ParameterList;
+non terminal FunctionDefinition FunctionDefinition;
+non terminal Definitions Definitions;
+non terminal List<VariableDefinition> VariableDefinitions;
+
+//precedence left INTEGER_SPECIFIER, BOOLEAN_SPECIFIER, DOUBLE_SPECIFIER, CHARACTER_SPECIFIER, STRUCT, VOID;
+precedence left LOR;
+precedence left LAND;
+precedence left EQUAL, NOT_EQUAL;
+precedence left LESS, GREATER, LESS_EQ, GREATER_EQ;
+precedence left PLUS, MINUS;
+precedence left TIMES, DIVISION, MODULUS;
+precedence right UMINUS, LNOT;
+precedence left LPAREN, RPAREN, LEFT_SQUARE, RIGHT_SQUARE, DOT;
+
+start with CompUnit;
+
+/* whitespace OR statement list */
+CompUnit               ::= Definitions:d
+                           {:
+                                RESULT = new Arraylist<Definitions>();
+                                RESULT.add(d);
+                                RESULT.setLine(dleft);
+                                RESULT.setColumn(dright);
+                            :}
+                         | CompUnit:cu Definitions:d 
+                           {:
+                                cu.add(d);
+                                RESULT = cu;
+                            :}
+                         ;
+
+
+Definitions            ::= VariableDefinition:vd
+                           {:
+                                RESULT = new Definitions(vd);
+                                RESULT.setLine(vdleft);
+                                RESULT.setColumn(vdright);
+                            :}
+                         | FunctionDefinition:fd
+                           {:
+                                RESULT = new Definitions(fd);
+                                RESULT.setLine(fdleft);
+                                RESULT.setColumn(fdright);
+                            :}
+                         | StructDefinition:sd
+                           {:
+                                RESULT = new Definitions(sd);
+                                RESULT.setLine(sdleft);
+                                RESULT.setColumn(sdright);
+                            :}
+                         ;
+
+FunctionDefinition     ::= TypeSpecifier:ts IDENTIFIER:i LPAREN ParameterList:pl RPAREN LCURLY StmtList:sl RCURLY
+                           {:
+                                RESULT = new FunctionDefinition(ts, i, pl, sl);
+                                RESULT.setLine(tsleft);
+                                RESULT.setColumn(tsright);
+                            :}
+                         ;
+
+ParameterList          ::= 
+                         | ParameterDeclaration:pd
+                            {:
+                                RESULT = new ArrayList<ParameterDeclaration>();
+                                RESULT.add(pd);
+                           :}
+                         | ParameterList:pl COMMA ParameterDeclaration:pd
+                            {:
+                                pl.add(pd);
+                                RESULT = pl;
+                          :}
+                         ;
+
+ParameterDeclaration   ::= TypeSpecifier:ts IDENTIFIER:i
+                            {:
+                                RESULT = new ParameterDeclarationifier(ts, i);
+                                RESULT.setLine(tsleft);
+                                RESULT.setColumn(tsright);
+                            :}
+                         | TypeSpecifier:ts LEFT_SQUARE RIGHT_SQUARE IDENTIFIER:i
+                            {:
+                                RESULT = new ParameterDeclarationifier(ts, i);
+                                RESULT.setLine(tsleft);
+                                RESULT.setColumn(tsright);
+                            :}
+                         ;
+TypeSpecifier          ::= CHARACTER_SPECIFIER:cs
+                             {: 
+                                RESULT = new Specifier(cs); //Type("char");
+                                RESULT.setLine(csleft);
+                                RESULT.setColumn(csright);
+                             :}
+                         | BOOLEAN_SPECIFIER:bs
+                            {: 
+                                RESULT = new Specifier(bs); //Type("bool");
+                                RESULT.setLine(bsleft);
+                                RESULT.setColumn(bsright);
+                            :}
+                         | INTEGER_SPECIFIER:is
+                            {: 
+                                RESULT = new Specifier(ls); //Type("int");
+                                RESULT.setLine(isleft);
+                                RESULT.setColumn(isright);
+                            :}
+                         | DOUBLE_SPECIFIER:ds
+                            {: 
+                                RESULT = new Specifier(ds); //Type("float");
+                                RESULT.setLine(dsleft);
+                                RESULT.setColumn(dsright);
+                            :}
+                         | VOID:v
+                            {: 
+                                RESULT = new Specifier(v); //Type("void");
+                                RESULT.setLine(vleft);
+                                RESULT.setColumn(vright);
+                            :}
+                         | STRUCT:s IDENTIFIER:i
+                            {: 
+                                RESULT = new Specifier(s, i); //Type("struct");
+                                RESULT.setLine(sleft);
+                                RESULT.setColumn(sright);
+                            :}
+                         ;
+
+VariableDefinitions    ::= VariableDefinition:vd
+                            {:
+                                RESULT = new ArrayList<VariableDefinition>();
+                                RESULT.add(vd);
+                           :}
+                         | VariableDefinitions:vds VariableDefinition:vd
+                            {:
+                                vds.add(vd);
+                                RESULT = vds;
+                            :}
+                         ;
+
+VariableDefinition     ::= TypeSpecifier:ts IDENTIFIER:i SEMICOLON
+                            {: 
+                                RESULT = new VariableDefinition(ts,i);
+                                RESULT.setLine(tsleft);
+                                RESULT.setColumn(tsright);
+                            :}
+                         | TypeSpecifier:ts IDENTIFIER:i LEFT_SQUARE INTEGER_LITERAL:il RIGHT_SQUARE SEMICOLON
+                            {: 
+                                RESULT = new VariableDefinition(ts,i, il);
+                                RESULT.setLine(tsleft);
+                                RESULT.setColumn(tsright);
+                            :}
+                         ;
+
+StructDefinition       ::= STRUCT:s IDENTIFIER:i LCURLY VariableDefinitions:vd RCURLY SEMICOLON
+                            {: 
+                                RESULT = new StructDefinition(i, vd);
+                                RESULT.setLine(sleft);
+                                RESULT.setColumn(sright);
+                            :}
+                         ;
+StmtList               ::= Stmt:s
+                           {:
+                                RESULT = new ArrayList<Statement>();
+                                RESULT.add(s);
+                           :}
+                        | StmtList:sl Stmt:s
+                           {:
+                                sl.add(s);
+                                RESULT = sl;
+                           :}
+                        ;  
+Stmt                   ::= PRINT:p LPAREN Expr:e RPAREN SEMICOLON
+                            {:
+                                RESULT = new PrintStatement(e);
+                                RESULT.setLine(pleft);
+                                RESULT.setColumn(pright);
+                            :}
+                         | IDENTIFIER:id EQ Expr:e SEMICOLON
+                            {:
+                                RESULT = new AssignmentStatement(id, e);
+                                RESULT.setLine(idleft);
+                                RESULT.setColumn(idright);
+                            :}
+                         | CompoundStmt:cs
+                            {:
+                                RESULT = new CompoundStatement();
+                                RESULT.setLine(csleft);
+                                RESULT.setColumn(csright);
+                            :}
+                         | DO:d Stmt:s WHILE LPAREN Expr:e RPAREN SEMICOLON
+                            {:
+                                RESULT = new DoWhileStatement(e, s);
+                                RESULT.setLine(dleft);
+                                RESULT.setColumn(dright);
+                            :}
+                         | WHILE:w LPAREN Expr:e RPAREN Stmt:s
+                            {:
+                                RESULT = new WhileStatement(e, s);
+                                RESULT.setLine(wleft);
+                                RESULT.setColumn(wright);
+                            :}
+                         | IF:i LPAREN Expr:e RPAREN Stmt:s
+                            {:
+                                RESULT = new IfStatement(e, s);
+                                RESULT.setLine(ileft);
+                                RESULT.setColumn(iright);
+                            :}
+                         | IF:i LPAREN Expr:e RPAREN Stmt:s1 ELSE Stmt:s2
+                            {:
+                                RESULT = new IfElseStatement(e, s1, s2);
+                                RESULT.setLine(ileft);
+                                RESULT.setColumn(iright);
+                            :}
+                         | Expr:e SEMICOLON
+                            {:
+                                RESULT = new Expression(e);
+                                RESULT.setLine(eleft);
+                                RESULT.setColumn(eright);
+                            :}
+                         | RETURN:r Expr:e SEMICOLON
+                            {:
+                                RESULT = new ReturnStatement(e);
+                                RESULT.setLine(rleft);
+                                RESULT.setColumn(rright);
+                            :}
+                         | RETURN:r SEMICOLON
+                            {:
+                                RESULT = new ReturnStatement();
+                                RESULT.setLine(rleft);
+                                RESULT.setColumn(rright);
+                            :}
+                         | Expr:e1 EQ Expr:e2 SEMICOLON
+                            {:
+                                RESULT = new ExprEqExpr(e1, e2);
+                                RESULT.setLine(e1left);
+                                RESULT.setColumn(e1right);
+                            :}
+                         | BREAK:b SEMICOLON
+                            {:
+                                RESULT = new BreakStatement();
+                                RESULT.setLine(bleft);
+                                RESULT.setColumn(bright);
+                            :}
+                         | CONTINUE:c SEMICOLON
+                            {:
+                                RESULT = new ContinueStatement();
+                                RESULT.setLine(cleft);
+                                RESULT.setColumn(cright);
+                            :}
+                         | VariableDefinition:vd
+                            {:
+                                RESULT = new VariableDefinitionStatement(vd);
+                                RESULT.setLine(vdleft);
+                                RESULT.setColumn(vdright);
+                            :}
+                         ;
+Expr                   ::= INTEGER_LITERAL:l
+                            {:
+                                RESULT = new IntegerLiteralExpression(l);
+                                RESULT.setLine(lleft);
+                                RESULT.setColumn(lright);
+                            :}
+                         | DOUBLE_LITERAL:l
+                            {:
+                                RESULT = new DoubleLiteralExpression(l);
+                                RESULT.setLine(lleft);
+                                RESULT.setColumn(lright);
+                            :}
+                         | STRING_LITERAL:l
+                            {:
+                                RESULT = new StringLiteralExpression(l);
+                                RESULT.setLine(sleft);
+                                RESULT.setColumn(sright);
+                            :}
+                         | BOOLEAN_LITERAL:l
+                            {:
+                                RESULT = new BooleanLiteralExpression(l);
+                                RESULT.setLine(bleft);
+                                RESULT.setColumn(bright);
+                            :}
+                         | CHARACTER_LITERAL:l
+                            {:
+                                RESULT = new CharacterLiteralExpression(l);
+                                RESULT.setLine(cleft);
+                                RESULT.setColumn(cright);
+                            :}
+                         | IDENTIFIER:id
+                            {:
+                                RESULT = new IdentifierExpression(id);
+                                RESULT.setLine(idleft);
+                                RESULT.setColumn(idright);
+                            :}
+                         | IDENTIFIER:id LPAREN ExprList:el RPAREN
+                            {:
+                                RESULT = new IdentifierExpression(id, el);
+                                RESULT.setLine(idleft);
+                                RESULT.setColumn(idright);
+                            :}
+                         | IDENTIFIER:id LEFT_SQUARE Expr:e RIGHT_SQUARE
+                            {:
+                                RESULT = new IdentifierExpression(id, e);
+                                RESULT.setLine(idleft);
+                                RESULT.setColumn(idright);
+                            :}
+                         | Expr:e DOT IDENTIFIER:id
+                            {:
+                                RESULT = new Expression(e, id);
+                                RESULT.setLine(eleft);
+                                RESULT.setColumn(eright);
+                            :}
+                         | Expr:e1 DOT IDENTIFIER:id LEFT_SQUARE Expr:e2 RIGHT_SQUARE
+                            {:
+                                RESULT = new Expression(id, e1, e2);
+                                RESULT.setLine(eleft);
+                                RESULT.setColumn(eright);
+                            :}
+                         | LPAREN:lp Expr:e RPAREN
+                            {:
+                                RESULT = new ParenthesisExpression(e);
+                                RESULT.setLine(lpleft);
+                                RESULT.setColumn(lpright);
+                            :}
+                         | Expr:e1 PLUS Expr:e2
+                            {:
+                                RESULT = new BinaryExpression(Operator.PLUS, e1, e2);
+                                RESULT.setLine(e1left);
+                                RESULT.setColumn(e1right);
+                            :}
+                         | Expr:e1 MINUS Expr:e2
+                            {:
+                                RESULT = new BinaryExpression(Operator.MINUS, e1, e2);
+                                RESULT.setLine(e1left);
+                                RESULT.setColumn(e1right);
+                            :}
+                         | Expr:e1 TIMES Expr:e2
+                            {:
+                                RESULT = new BinaryExpression(Operator.MULTIPLY, e1, e2);
+                                RESULT.setLine(e1left);
+                                RESULT.setColumn(e1right);
+                            :}
+                         | Expr:e1 DIVISION Expr:e2
+                            {:
+                                RESULT = new BinaryExpression(Operator.DIVISION, e1, e2);
+                                RESULT.setLine(e1left);
+                                RESULT.setColumn(e1right);
+                            :}
+                         | Expr:e1 MODULUS Expr:e2
+                            {:
+                                RESULT = new BinaryExpression(Operator.MODULUS, e1, e2);
+                                RESULT.setLine(e1left);
+                                RESULT.setColumn(e1right);
+                            :}
+                         | Expr:e1 EQUAL Expr:e2
+                            {:
+                                RESULT = new BinaryExpression(Operator.EQUAL, e1, e2);
+                                RESULT.setLine(e1left);
+                                RESULT.setColumn(e1right);
+                            :}
+                         | Expr:e1 NOT_EQUAL Expr:e2
+                            {:
+                                RESULT = new BinaryExpression(Operator.NOT_EQUAL, e1, e2);
+                                RESULT.setLine(e1left);
+                                RESULT.setColumn(e1right);
+                            :}
+                         | Expr:e1 LESS Expr:e2
+                            {:
+                                RESULT = new BinaryExpression(Operator.LESS, e1, e2);
+                                RESULT.setLine(e1left);
+                                RESULT.setColumn(e1right);
+                            :}
+                         | Expr:e1 LESS_EQ Expr:e2
+                            {:
+                                RESULT = new BinaryExpression(Operator.LESS_EQ, e1, e2);
+                                RESULT.setLine(e1left);
+                                RESULT.setColumn(e1right);
+                            :}
+                         | Expr:e1 GREATER Expr:e2
+                            {:
+                                RESULT = new BinaryExpression(Operator.GREATER, e1, e2);
+                                RESULT.setLine(e1left);
+                                RESULT.setColumn(e1right);
+                            :}
+                         | Expr:e1 GREATER_EQ Expr:e2
+                            {:
+                                RESULT = new BinaryExpression(Operator.GREATER_EQ, e1, e2);
+                                RESULT.setLine(e1left);
+                                RESULT.setColumn(e1right);
+                            :}
+                         | LNOT Expr:e
+                            {:
+                                RESULT = new UnaryExpression(Operator.LNOT, e);
+                                RESULT.setLine(eleft);
+                                RESULT.setColumn(eright);
+                            :}
+                         | Expr:e1 LOR Expr:e2
+                            {:
+                                RESULT = new BinaryExpression(Operator.LOR, e1, e2);
+                                RESULT.setLine(e1left);
+                                RESULT.setColumn(e2right);
+                            :}
+                         | Expr:e1 LAND Expr:e2
+                            {:
+                                RESULT = new BinaryExpression(Operator.LAND, e1, e2);
+                                RESULT.setLine(e1left);
+                                RESULT.setColumn(e2right);
+                            :}
+                         | MINUS:m Expr:e 
+                            {:
+                                RESULT = new UnaryExpression(Operator.MINUS, e);
+                                RESULT.setLine(mleft);
+                                RESULT.setColumn(mright);
+                            :}
+                            %prec UMINUS
+                         ;
+ExprList               ::= Expr:e
+                            {:
+                                RESULT = new ArrayList<Expression>();
+                                RESULT.add(e);
+                            :}
+                         | ExprList:el COMMA Expr:e
+                            {:
+                                el.add(e);
+                                RESULT = el;
+                            :}
+                         ;
+CompoundStmt           ::= LEFT_SQUARE:lb StmtList:sl RIGHT_SQUARE
+                            {:
+                                RESULT = new CompoundStatement(sl);
+                                RESULT.setLine(lbleft);
+                                RESULT.setColumn(lbright);
+                            :}
+                         | LEFT_SQUARE:lb RIGHT_SQUARE
+                            {:
+                                RESULT = new CompoundStatement();
+                                RESULT.setLine(lbleft);
+                                RESULT.setColumn(lbright);
+                            :}
+                         ;

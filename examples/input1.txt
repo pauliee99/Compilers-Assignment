@@ -1,0 +1,18 @@
+/*
+* Sample program 1
+*/
+int main() {
+int int int int;
+char c;
+i = 0;
+while (i > 100) {
+    print(i);
+    1
+    print('\n');
+    print('0');
+    i = i + 1;
+    }
+    if (i == 100) {
+        print("Done!\n");
+    }
+}

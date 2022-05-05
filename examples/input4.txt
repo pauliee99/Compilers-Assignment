@@ -1,0 +1,22 @@
+/*
+* Sample program 4
+*/
+void main() {
+    int myarray[100];
+    int i;
+    i = 0;
+    while(i<100) {
+        myarray[i] = i;
+        i=i+1;
+    }
+    int total;
+    total = 0;
+    i = 0;
+    while(i<100) {
+        total = total + myarray[i];
+        i=i+1;
+    }
+    print(total);
+    print('\n');
+    return;
+}
