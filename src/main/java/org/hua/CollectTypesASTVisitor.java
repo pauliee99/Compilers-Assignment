@@ -10,22 +10,34 @@ import org.hua.ast.ASTVisitor;
 import org.hua.ast.ASTVisitorException;
 import org.hua.ast.AssignmentStatement;
 import org.hua.ast.BinaryExpression;
+import org.hua.ast.BooleanLiteralExpression;
 import org.hua.ast.BreakStatement;
+import org.hua.ast.CharacterLiteralExpression;
 import org.hua.ast.CompUnit;
 import org.hua.ast.CompoundStatement;
 import org.hua.ast.ContinueStatement;
+import org.hua.ast.Definitions;
 import org.hua.ast.DoWhileStatement;
 import org.hua.ast.DoubleLiteralExpression;
+import org.hua.ast.ExprEqExpr;
+import org.hua.ast.Expression;
+import org.hua.ast.FunctionDefinition;
 import org.hua.ast.IdentifierExpression;
 import org.hua.ast.IfElseStatement;
 import org.hua.ast.IfStatement;
 import org.hua.ast.IntegerLiteralExpression;
+import org.hua.ast.ParameterDeclaration;
 import org.hua.ast.ParenthesisExpression;
 import org.hua.ast.PrintStatement;
+import org.hua.ast.ReturnStatement;
+import org.hua.ast.Specifiers;
 import org.hua.ast.Statement;
 import org.hua.ast.StringLiteralExpression;
+import org.hua.ast.StructDefinition;
 import org.hua.ast.UnaryExpression;
 import org.hua.ast.VarDeclarationStatement;
+import org.hua.ast.VariableDefinition;
+import org.hua.ast.VariableDefinitionStatement;
 import org.hua.ast.WhileStatement;
 import org.hua.symbol.Info;
 import org.hua.symbol.SymbolTable;
@@ -43,8 +55,8 @@ public class CollectTypesASTVisitor implements ASTVisitor {
 
 	@Override
 	public void visit(CompUnit node) throws ASTVisitorException {
-		for (Statement s : node.getStatements()) {
-			s.accept(this);
+		for (Definitions d : node.getDefinitions()) {
+			d.accept(this);
 		}
 		ASTUtils.setType(node, Type.VOID_TYPE);
 	}
@@ -222,6 +234,99 @@ public class CollectTypesASTVisitor implements ASTVisitor {
 		}
 		node.getStatement().accept(this);
 		ASTUtils.setType(node, Type.VOID_TYPE);
+	}
+
+	@Override
+	public void visit(VariableDefinition node) throws ASTVisitorException {
+		node.getTypeSpecifier().accept(this);
+		node.getIdentifier().accept(this);
+		node.getIntegerLiteral().accept(this);
+		ASTUtils.setType(node, Type.INT_TYPE);
+		
+	}
+
+	@Override
+	public void visit(FunctionDefinition node) throws ASTVisitorException {
+		node.getTypeSpecifier().accept(this);
+		node.getIdentifier().accept(this);
+		ASTUtils.setType(node, Type.VOID_TYPE);
+		
+	}
+
+	@Override
+	public void visit(StructDefinition node) throws ASTVisitorException {
+		node.getIdentifier().accept(this);
+		ASTUtils.setType(node, Type.VOID_TYPE);
+		
+	}
+
+	@Override
+	public void visit(Definitions node) throws ASTVisitorException {
+		node.getFunctionDefinition().accept(this);
+		node.getStructDefinition().accept(this);
+		node.getVariableDefinition().accept(this);
+		ASTUtils.setType(node, Type.VOID_TYPE);
+		
+	}
+
+	@Override
+	public void visit(ReturnStatement node) throws ASTVisitorException {
+		node.getExpression().accept(this);
+		if (!ASTUtils.getSafeType(node.getExpression()).equals(Type.METHOD)) {
+			ASTUtils.error(node.getExpression(), "Invalid expression, should be the same type as method");
+		}
+		ASTUtils.setType(node, Type.VOID_TYPE);
+		
+	}
+
+	@Override
+	public void visit(BooleanLiteralExpression node) throws ASTVisitorException {
+		ASTUtils.setType(node, Type.BOOLEAN_TYPE);
+		
+	}
+
+	@Override
+	public void visit(CharacterLiteralExpression node) throws ASTVisitorException {
+		ASTUtils.setType(node, Type.CHAR_TYPE);
+		
+	}
+
+	@Override
+	public void visit(ParameterDeclaration node) throws ASTVisitorException {
+		node.getTypeSpecifier().accept(this);
+		node.getIdentifier().accept(this);
+
+	}
+
+	@Override
+	public void visit(Expression node) throws ASTVisitorException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visit(ExprEqExpr node) throws ASTVisitorException {
+		node.getExpression1().accept(this);
+		node.getExpression2().accept(this);
+		if (!ASTUtils.getSafeType(node.getExpression1()).equals(node.getExpression2())) {
+			ASTUtils.error(node.getExpression2(), "expression 2 does not equals expression 1");
+		}
+		ASTUtils.setType(node, Type.VOID_TYPE);
+		
+	}
+
+	@Override
+	public void visit(Specifiers node) throws ASTVisitorException {
+		node.getIdentifier().accept(this);
+		ASTUtils.setType(node, Type.VOID_TYPE);
+		
+	}
+
+	@Override
+	public void visit(VariableDefinitionStatement node) throws ASTVisitorException {
+		node.getVariableDefinition().accept(this);
+		ASTUtils.setType(node, Type.VOID_TYPE);
+		
 	}
 
 }

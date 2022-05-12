@@ -272,4 +272,14 @@ public class SymTableBuilderASTVisitor implements ASTVisitor {
 		
 	}
 
+	private void pushEnvironment() {
+		SymbolTable<Info> oldSymbolTable = stack.peek();
+		SymbolTable<Info> symbolTable = new HashSymbolTable<>(oldSymbolTable);
+		stack.push(symbolTable);
+	}
+
+	private void popEnvironment() {
+		stack.pop();
+	}
+
 }

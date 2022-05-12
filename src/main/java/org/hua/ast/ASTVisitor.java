@@ -31,9 +31,15 @@ public interface ASTVisitor {
 
     void visit(ParenthesisExpression node) throws ASTVisitorException;
 
+    void visit(DoWhileStatement node) throws ASTVisitorException;
+
     void visit(WhileStatement node) throws ASTVisitorException;
 
-    void visit(DoWhileStatement node) throws ASTVisitorException;
+    void visit(VarDeclarationStatement node) throws ASTVisitorException;
+
+    void visit(BreakStatement node) throws ASTVisitorException;
+
+    void visit(ContinueStatement node) throws ASTVisitorException;
 
     void visit(IfElseStatement node) throws ASTVisitorException;
 
@@ -53,10 +59,6 @@ public interface ASTVisitor {
     
     void visit(CharacterLiteralExpression node) throws ASTVisitorException;
 
-    void visit(BreakStatement node) throws ASTVisitorException;
-
-    void visit(ContinueStatement node) throws ASTVisitorException;
-
     void visit(ParameterDeclaration node) throws ASTVisitorException;
 
     void visit(Expression node) throws ASTVisitorException;
@@ -66,7 +68,5 @@ public interface ASTVisitor {
     void visit(Specifiers node) throws ASTVisitorException;
 
     void visit(VariableDefinitionStatement node) throws ASTVisitorException;
-
-    void visit(VarDeclarationStatement varDeclarationStatement) throws ASTVisitorException;
 
 }
