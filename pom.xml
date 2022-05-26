@@ -193,8 +193,11 @@
 					<arguments>
 						<argument>-expect</argument>
 						<argument>1</argument>
+<<<<<<< Updated upstream
 						<argument>-package</argument>
 						<argument>org.hua</argument>
+=======
+>>>>>>> Stashed changes
 						<argument>-destdir</argument>
 						<argument>${basedir}/src/main/java/org/hua</argument>
 						<argument>${basedir}/src/main/cup/grammar.cup</argument>
