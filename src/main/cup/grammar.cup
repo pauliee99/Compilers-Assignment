@@ -89,7 +89,7 @@ non terminal CompoundStatement CompoundStmt;
 non terminal List<Expression> ExprList;
 non terminal VariableDefinition VariableDefinition;
 non terminal StructDefinition StructDefinition;
-non terminal TypeSpecifier TypeSpecifier;
+non terminal Type TypeSpecifier;
 non terminal ParameterDeclaration ParameterDeclaration;
 non terminal List<ParameterDeclaration> ParameterList;
 non terminal FunctionDefinition FunctionDefinition;
