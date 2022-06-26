@@ -32,4 +32,8 @@ public enum Operator {
         return type;
     }
 
+    public boolean isRelational() {
+        return false;
+    }
+
 }
